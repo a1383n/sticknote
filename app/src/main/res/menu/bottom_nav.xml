@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="Setting"
+        android:id="@+id/setting"
+        android:icon="@drawable/setting"
+        app:showAsAction="always"/>
+
+    <item
+        android:title="Cloud"
+        android:id="@+id/cloud"
+        android:icon="@drawable/cloud"
+        app:showAsAction="always"/>
+
+
+    <item
+        android:title=""
+        app:showAsAction="always"/>
+
+    <item
+        android:title="Gallery"
+        android:id="@+id/gallery"
+        android:icon="@drawable/gallery"
+        app:showAsAction="always"/>
+
+    <item
+        android:title="Info"
+        android:id="@+id/info"
+        android:icon="@drawable/information"
+        app:showAsAction="always"/>
+
+</menu>

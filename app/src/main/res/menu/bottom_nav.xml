@@ -4,13 +4,13 @@
     <item
         android:title="Setting"
         android:id="@+id/setting"
-        android:icon="@drawable/setting"
+        android:icon="@drawable/ic_baseline_settings_24"
         app:showAsAction="always"/>
 
     <item
         android:title="Cloud"
         android:id="@+id/cloud"
-        android:icon="@drawable/cloud"
+        android:icon="@drawable/ic_baseline_cloud_24"
         app:showAsAction="always"/>
 
 
@@ -19,15 +19,15 @@
         app:showAsAction="always"/>
 
     <item
-        android:title="Gallery"
-        android:id="@+id/gallery"
-        android:icon="@drawable/gallery"
+        android:title="Notes"
+        android:id="@+id/notes"
+        android:icon="@drawable/ic_baseline_text_snippet_24"
         app:showAsAction="always"/>
 
     <item
         android:title="Info"
         android:id="@+id/info"
-        android:icon="@drawable/information"
+        android:icon="@drawable/ic_baseline_info_24"
         app:showAsAction="always"/>
 
 </menu>

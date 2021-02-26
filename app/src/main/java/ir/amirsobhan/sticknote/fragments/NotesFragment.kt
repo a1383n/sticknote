@@ -20,15 +20,9 @@ class NotesFragment : Fragment() {
 
 
         binding.recyclerView.adapter = NoteAdapter(listOf(
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1),
-            Note(1,"","",1)))
+            Note(1,"Summer Fun","W",System.currentTimeMillis()),
+            Note(1,"UX Basics","U",System.currentTimeMillis()),
+            Note(1,"Family","F",System.currentTimeMillis())))
 
         return binding.root
     }

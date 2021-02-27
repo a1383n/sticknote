@@ -29,4 +29,8 @@ class NoteRepository(private val noteDao: NoteDao) {
     fun insert(note: Note){
         AppExecutor.invoke().diskIO().submit(Runnable { noteDao.insert(note) })
     }
+
+    fun update(note: Note){
+        AppExecutor.invoke().diskIO().submit(Runnable { noteDao.update(note) })
+    }
 }

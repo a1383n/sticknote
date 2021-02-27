@@ -1,9 +1,9 @@
 package ir.amirsobhan.sticknote
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ir.amirsobhan.sticknote.adapters.MainViewPagerAdapter
-import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
 
         setupBottomNavigation()
+
+        activityMainBinding.floatingAction.setOnClickListener {
+            startActivity(Intent(this, AddNoteActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation(){

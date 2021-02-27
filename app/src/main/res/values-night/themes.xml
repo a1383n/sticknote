@@ -27,5 +27,7 @@
         <item name="fontFamily">@font/montserrat</item>
     </style>
 
-
+    <style name="HideText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
 </resources>

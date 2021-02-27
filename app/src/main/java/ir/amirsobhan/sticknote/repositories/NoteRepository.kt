@@ -1,6 +1,7 @@
 package ir.amirsobhan.sticknote.repositories
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import ir.amirsobhan.sticknote.AppExecutor
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.database.Note
@@ -20,8 +21,12 @@ class NoteRepository(private val noteDao: NoteDao) {
         private fun build(application: Application) = NoteRepository(AppDatabase.invoke(application).noteDao())
     }
 
-    fun getAll() : List<Note> {
-        var callable: Callable<List<Note>> = Callable { return@Callable noteDao.getAll() }
+    fun getAll() : LiveData<List<Note>> {
+        var callable: Callable<LiveData<List<Note>>> = Callable { return@Callable noteDao.getAll() }
         return AppExecutor.invoke().diskIO().submit(callable).get()
+    }
+
+    fun insert(note: Note){
+        AppExecutor.invoke().diskIO().submit(Runnable { noteDao.insert(note) })
     }
 }

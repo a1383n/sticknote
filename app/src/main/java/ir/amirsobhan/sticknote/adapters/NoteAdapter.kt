@@ -8,9 +8,12 @@ import ir.amirsobhan.sticknote.databinding.RowNoteBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteAdapter(var noteList: List<Note>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+
+    var noteList: List<Note> = listOf()
 
     class ViewHolder(val binding: RowNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(note: Note){
             binding.title.text = note.title;
             binding.body.text = note.text;
@@ -31,7 +34,7 @@ class NoteAdapter(var noteList: List<Note>) : RecyclerView.Adapter<NoteAdapter.V
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(RowNoteBinding.inflate(LayoutInflater.from(parent.context),parent,false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(noteList[position])
+        noteList.get(position).also { holder.bind(it) }
     }
 
     override fun getItemCount() = noteList.size

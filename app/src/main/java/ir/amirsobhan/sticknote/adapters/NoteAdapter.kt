@@ -1,23 +1,34 @@
 package ir.amirsobhan.sticknote.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import ir.amirsobhan.sticknote.NoteActivity
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.RowNoteBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     var noteList: List<Note> = listOf()
 
-    class ViewHolder(val binding: RowNoteBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(val binding: RowNoteBinding, val context: Context) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(note: Note){
+        fun bind(note: Note) {
             binding.title.text = note.title;
             binding.body.text = note.text;
             binding.time.text = getDateTime(note.timestamp)
+
+            binding.root.setOnClickListener {
+                var intent = Intent(context, NoteActivity::class.java)
+                intent.putExtra("json", Gson().toJson(note))
+                context.startActivity(intent)
+            }
         }
 
         fun getDateTime(long: Long): String? {
@@ -31,7 +42,9 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(RowNoteBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        RowNoteBinding.inflate(LayoutInflater.from(parent.context), parent, false),context.let { context -> parent.context }
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         noteList.get(position).also { holder.bind(it) }

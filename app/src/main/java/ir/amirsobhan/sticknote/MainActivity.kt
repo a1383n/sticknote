@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigation()
 
         activityMainBinding.floatingAction.setOnClickListener {
-            startActivity(Intent(this, AddNoteActivity::class.java))
+            startActivity(Intent(this, NoteActivity::class.java))
         }
     }
 

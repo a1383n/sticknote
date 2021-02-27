@@ -21,7 +21,7 @@ class NotesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         _binding = FragmentNotesBinding.inflate(layoutInflater,container,false)
 
-        adapter = NoteAdapter()
+        adapter = NoteAdapter(context)
 
         val model : NoteViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application).create(NoteViewModel::class.java)
         model.notes.observe(this, Observer {

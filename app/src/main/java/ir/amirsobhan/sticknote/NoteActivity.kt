@@ -2,41 +2,51 @@ package ir.amirsobhan.sticknote
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import ir.amirsobhan.sticknote.database.Note
-import ir.amirsobhan.sticknote.databinding.ActivityAddNoteBinding
+import ir.amirsobhan.sticknote.databinding.ActivityNoteBinding
 import ir.amirsobhan.sticknote.helper.KeyboardManager
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 
-class AddNoteActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddNoteBinding
+class NoteActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityNoteBinding
     private lateinit var keyboardManager: KeyboardManager
+    private var note: Note? = null
+    var fromIntent = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddNoteBinding.inflate(layoutInflater)
+        binding = ActivityNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         keyboardManager = KeyboardManager(this)
 
+        loadFromIntent()
         setupAppBar()
         setEditText()
     }
 
+    private fun loadFromIntent() {
+        var json = intent.getStringExtra("json")
+        if (json != null) {
+            fromIntent = true
+            note = Gson().fromJson(json,Note::class.java)
+
+            binding.toolbarEditText.setText(note?.title)
+            binding.body.setText(note?.text)
+            binding.collapsingToolbarLayout.title = note?.title
+        }
+    }
 
     private fun setupAppBar() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-        if (binding.toolbarEditText.hint == getString(R.string.untitled)) binding.collapsingToolbarLayout.title =
+        if (binding.toolbarEditText.hint == getString(R.string.untitled) && TextUtils.isEmpty(binding.toolbarEditText.text.toString())) binding.collapsingToolbarLayout.title =
             getString(R.string.untitled)
         else binding.collapsingToolbarLayout.title = binding.toolbarEditText.text.toString()
 
         binding.toolbar.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.save -> onBackPressed()
             }
 
@@ -58,26 +68,22 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private fun saveToDB() {
+        if (fromIntent) return
+
         var noteViewModel: NoteViewModel =
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
                 .create(NoteViewModel::class.java)
-        noteViewModel.insert(
-            Note(
-                null,
-                binding.toolbarEditText.text.toString(),
-                binding.body.text.toString(),
-                System.currentTimeMillis()
-            )
-        )
+        noteViewModel.insert(Note(null, binding.toolbarEditText.text.toString(), binding.body.text.toString(), System.currentTimeMillis()))
+
+        Toast.makeText(this, "Your note saved successfully", Toast.LENGTH_LONG).show()
 
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         if (!TextUtils.isEmpty(binding.body.text.toString())) {
-       //     if (binding.toolbarEditText.hint == getString(R.string.untitled)) binding.toolbarEditText.text = getString(R.string.untitled)
+            //     if (binding.toolbarEditText.hint == getString(R.string.untitled)) binding.toolbarEditText.text = getString(R.string.untitled)
             saveToDB()
-            Toast.makeText(this, "Your note saved successfully", Toast.LENGTH_LONG).show()
         }
     }
 }

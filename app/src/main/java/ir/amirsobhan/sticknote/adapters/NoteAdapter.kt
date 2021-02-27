@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import ir.amirsobhan.sticknote.NoteActivity
 import ir.amirsobhan.sticknote.database.Note
@@ -29,6 +30,7 @@ class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.View
                 intent.putExtra("json", Gson().toJson(note))
                 context.startActivity(intent)
             }
+
         }
 
         fun getDateTime(long: Long): String? {

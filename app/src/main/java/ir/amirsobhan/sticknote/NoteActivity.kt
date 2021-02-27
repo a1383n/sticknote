@@ -6,8 +6,9 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.view.menu.MenuBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.ActivityNoteBinding
@@ -18,7 +19,7 @@ class NoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNoteBinding
     val noteViewModel : NoteViewModel by viewModels()
     private lateinit var keyboardManager: KeyboardManager
-    private var note: Note? = null
+    private lateinit var note: Note
     var fromIntent = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +35,16 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun loadFromIntent() {
-        var json = intent.getStringExtra("json")
+        val json = intent.getStringExtra("json")
         if (json != null) {
             fromIntent = true
             note = Gson().fromJson(json, Note::class.java)
 
-            binding.toolbarEditText.setText(note?.title)
-            binding.body.setText(note?.text)
-            binding.collapsingToolbarLayout.title = note?.title
+            binding.toolbarEditText.setText(note.title)
+            binding.body.setText(note.text)
+            binding.collapsingToolbarLayout.title = note.title
+        }else{
+            note = Note(null,"","",System.currentTimeMillis())
         }
     }
 
@@ -54,9 +57,17 @@ class NoteActivity : AppCompatActivity() {
             getString(R.string.untitled)
         else binding.collapsingToolbarLayout.title = binding.toolbarEditText.text.toString()
 
+
+        if (fromIntent){
+            binding.toolbar.inflateMenu(R.menu.edit_note)
+        }else{
+            binding.toolbar.inflateMenu(R.menu.add_note)
+        }
+
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save -> onBackPressed()
+                R.id.delete -> deleteDB()
             }
 
             true
@@ -98,6 +109,14 @@ class NoteActivity : AppCompatActivity() {
         })
     }
 
+    private fun deleteDB(){
+        MaterialAlertDialogBuilder(this,R.style.AlertDialogTheme)
+            .setTitle("Are you sure you want to delete this note ?")
+            .setPositiveButton("Yes") {dialog,witch -> noteViewModel.delete(note).also { finish() }}
+            .setNegativeButton("No",null)
+            .show()
+    }
+
     override fun onBackPressed() {
         keyboardManager.closeKeyboard(binding.body)
         keyboardManager.closeKeyboard(binding.toolbarEditText)
@@ -112,9 +131,13 @@ class NoteActivity : AppCompatActivity() {
                         .setNegativeButton("Discard") { dialogInterface: DialogInterface, i: Int -> finish() }
                         .setNeutralButton("Cancel", null)
                         .show()
+            }else{
+                super.onBackPressed()
             }
         } else if (!TextUtils.isEmpty(binding.body.text.toString())) {
             insertToDB()
+            super.onBackPressed()
+        }else{
             super.onBackPressed()
         }
     }

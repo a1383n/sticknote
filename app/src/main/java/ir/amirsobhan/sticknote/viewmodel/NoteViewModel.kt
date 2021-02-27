@@ -21,4 +21,7 @@ class NoteViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
 
+    fun delete(note: Note){
+        repository.delete(note)
+    }
 }

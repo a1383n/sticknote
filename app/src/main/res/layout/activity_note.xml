@@ -51,7 +51,6 @@
                 android:paddingTop="10dp"
                 android:paddingRight="15dp"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/add_note"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 app:titleTextColor="@color/white" />
 

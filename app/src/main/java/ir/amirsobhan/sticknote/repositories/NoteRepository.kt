@@ -33,4 +33,8 @@ class NoteRepository(private val noteDao: NoteDao) {
     fun update(note: Note){
         AppExecutor.invoke().diskIO().submit(Runnable { noteDao.update(note) })
     }
+
+    fun delete(note: Note){
+        AppExecutor.invoke().diskIO().submit(Runnable { noteDao.delete(note) })
+    }
 }

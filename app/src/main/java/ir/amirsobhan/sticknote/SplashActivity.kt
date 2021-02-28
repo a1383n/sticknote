@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import ir.amirsobhan.sticknote.databinding.SplashActivityBinding
+import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 
 class SplashActivity : AppCompatActivity(){
     private lateinit var splashActivityBinding: SplashActivityBinding

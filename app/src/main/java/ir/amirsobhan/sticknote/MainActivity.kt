@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        // Add Corner to BottomBar
         var radius = resources.getDimension(R.dimen.bottom_nav_corner)
         val bottomBarBackground = activityMainBinding.bottomBar.background as MaterialShapeDrawable
         bottomBarBackground.shapeAppearanceModel = bottomBarBackground.shapeAppearanceModel

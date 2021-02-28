@@ -3,9 +3,9 @@ package ir.amirsobhan.sticknote.adapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import ir.amirsobhan.sticknote.NoteActivity
 import ir.amirsobhan.sticknote.database.Note
@@ -29,6 +29,16 @@ class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.View
                 var intent = Intent(context, NoteActivity::class.java)
                 intent.putExtra("json", Gson().toJson(note))
                 context.startActivity(intent)
+            }
+
+            // If note content is large make shorter
+
+            if(note.text != null && note.text!!.length > 150){
+                binding.body.text = "${note.text?.substring(0,150)} ..."
+            }
+
+            if (note.title.isEmpty()){
+                binding.title.visibility = View.GONE
             }
 
         }

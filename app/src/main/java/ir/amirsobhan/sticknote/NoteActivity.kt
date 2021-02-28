@@ -134,7 +134,7 @@ class NoteActivity : AppCompatActivity() {
             }else{
                 super.onBackPressed()
             }
-        } else if (!TextUtils.isEmpty(binding.body.text.toString())) {
+        } else if (!TextUtils.isEmpty(binding.body.text.toString()) || !TextUtils.isEmpty(binding.toolbarEditText.text.toString())) {
             insertToDB()
             super.onBackPressed()
         }else{

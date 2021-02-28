@@ -1,10 +1,13 @@
 package ir.amirsobhan.sticknote
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
 import ir.amirsobhan.sticknote.adapters.MainViewPagerAdapter
 import ir.amirsobhan.sticknote.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -21,7 +24,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation(){
-        activityMainBinding.viewPager.adapter = MainViewPagerAdapter(supportFragmentManager,lifecycle)
+        activityMainBinding.viewPager.adapter = MainViewPagerAdapter(
+            supportFragmentManager,
+            lifecycle
+        )
         activityMainBinding.viewPager.currentItem = 2
         activityMainBinding.bottomNavigation.selectedItemId = R.id.notes
         activityMainBinding.viewPager.isUserInputEnabled = false;
@@ -33,8 +39,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.info -> activityMainBinding.viewPager.currentItem = 3
                 else -> false
             }
-
             true
         }
+
+        var radius = resources.getDimension(R.dimen.bottom_nav_corner)
+        val bottomBarBackground = activityMainBinding.bottomBar.background as MaterialShapeDrawable
+        bottomBarBackground.shapeAppearanceModel = bottomBarBackground.shapeAppearanceModel
+            .toBuilder()
+            .setTopRightCorner(CornerFamily.ROUNDED,radius)
+            .setTopLeftCorner(CornerFamily.ROUNDED,radius)
+            .build()
+
     }
 }

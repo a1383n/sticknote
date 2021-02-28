@@ -11,7 +11,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?android:actionBarSize"/>
+        android:layout_marginBottom="?android:actionBarSize" />
 
 
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -23,13 +23,14 @@
         app:contentInsetStart="0dp"
         app:fabAlignmentMode="center">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/primary"
-            app:menu="@menu/bottom_nav"
-            app:labelVisibilityMode="unlabeled"/>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavigation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/fake_bg"
+                android:backgroundTint="@color/theme_mode"
+                app:labelVisibilityMode="unlabeled"
+                app:menu="@menu/bottom_nav" />
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -40,8 +41,8 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_baseline_add_24"
-        app:maxImageSize="40dp"
         app:layout_anchor="@id/bottomBar"
-        app:layout_anchorGravity="bottom|center" />
+        app:layout_anchorGravity="bottom|center"
+        app:maxImageSize="40dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

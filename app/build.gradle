@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id "koin"
 }
 
 android {
@@ -65,5 +66,14 @@ dependencies {
 
     // GSON
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Koin injection
+    def koin_version = "2.2.2"
+    implementation "org.koin:koin-android:$koin_version"
+    // Koin Android Scope features
+    implementation "org.koin:koin-android-scope:$koin_version"
+    // Koin Android ViewModel features
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+
 
 }

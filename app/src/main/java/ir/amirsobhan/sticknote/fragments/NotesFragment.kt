@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import ir.amirsobhan.sticknote.adapters.NoteAdapter
 import ir.amirsobhan.sticknote.databinding.FragmentNotesBinding
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
+import org.koin.android.ext.android.inject
 
 class NotesFragment : Fragment() {
     private var _binding: FragmentNotesBinding? = null
@@ -20,7 +21,8 @@ class NotesFragment : Fragment() {
 
         adapter = NoteAdapter(context)
 
-        val model : NoteViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application).create(NoteViewModel::class.java)
+        val model : NoteViewModel by inject()
+
         model.notes.observe(this, Observer {
             adapter.noteList = it
             adapter.notifyDataSetChanged()

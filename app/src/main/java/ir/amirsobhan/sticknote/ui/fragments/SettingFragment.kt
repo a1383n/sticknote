@@ -1,16 +1,18 @@
 package ir.amirsobhan.sticknote.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import ir.amirsobhan.sticknote.R
 
-class SettingFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+class SettingFragment : PreferenceFragmentCompat(){
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.root_setting,rootKey)
+        var themeListPreference : ListPreference? = findPreference("theme")
+
+        themeListPreference?.setOnPreferenceChangeListener { preference, newValue -> AppCompatDelegate.setDefaultNightMode(newValue.toString().toInt()).run { true } }
     }
 
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import ir.amirsobhan.sticknote.adapters.NoteAdapter
 import ir.amirsobhan.sticknote.databinding.FragmentNotesBinding
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
@@ -31,7 +30,6 @@ class NotesFragment : Fragment() {
 
         binding.recyclerView.layoutManager?.isAutoMeasureEnabled = true
         binding.recyclerView.isNestedScrollingEnabled = false
-
 
         return binding.root
     }

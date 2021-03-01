@@ -13,10 +13,12 @@ import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.ActivityNoteBinding
 import ir.amirsobhan.sticknote.helper.KeyboardManager
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.getViewModel
 
 class NoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNoteBinding
-    val noteViewModel : NoteViewModel by viewModels()
+    val noteViewModel : NoteViewModel by inject()
     private lateinit var keyboardManager: KeyboardManager
     private lateinit var note: Note
     var fromIntent = false

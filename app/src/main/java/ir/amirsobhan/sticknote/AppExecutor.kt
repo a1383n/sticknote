@@ -10,16 +10,6 @@ import java.util.concurrent.Executors
 
 class AppExecutor {
 
-    companion object{
-        @Volatile
-        private var instance: AppExecutor? = null
-        private val LOCK = Any();
-
-        operator fun invoke() = instance ?: synchronized(LOCK) {
-            instance ?: AppExecutor()
-        }
-    }
-
     fun diskIO(): ExecutorService {
         return Executors.newSingleThreadExecutor()
     }

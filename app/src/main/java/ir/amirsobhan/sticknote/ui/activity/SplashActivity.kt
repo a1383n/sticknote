@@ -1,4 +1,4 @@
-package ir.amirsobhan.sticknote
+package ir.amirsobhan.sticknote.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.SplashActivityBinding
-import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 
 class SplashActivity : AppCompatActivity(){
     private lateinit var splashActivityBinding: SplashActivityBinding
@@ -25,7 +24,7 @@ class SplashActivity : AppCompatActivity(){
 
 
         //Start MainActivity after 1.5 second
-        val intent : Intent = Intent(this,MainActivity::class.java)
+        val intent : Intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         handler = Handler()
         handler.postDelayed(Runnable {

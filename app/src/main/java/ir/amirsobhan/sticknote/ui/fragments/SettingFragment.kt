@@ -1,4 +1,4 @@
-package ir.amirsobhan.sticknote.fragments
+package ir.amirsobhan.sticknote.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import ir.amirsobhan.sticknote.NoteActivity
+import ir.amirsobhan.sticknote.ui.activity.NoteActivity
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.RowNoteBinding
 import java.text.SimpleDateFormat

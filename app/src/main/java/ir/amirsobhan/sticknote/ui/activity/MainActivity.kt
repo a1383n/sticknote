@@ -1,10 +1,11 @@
-package ir.amirsobhan.sticknote
+package ir.amirsobhan.sticknote.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
+import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.adapters.MainViewPagerAdapter
 import ir.amirsobhan.sticknote.databinding.ActivityMainBinding
 

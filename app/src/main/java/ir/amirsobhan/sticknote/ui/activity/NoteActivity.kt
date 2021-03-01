@@ -1,4 +1,4 @@
-package ir.amirsobhan.sticknote
+package ir.amirsobhan.sticknote.ui.activity
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -6,10 +6,9 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.ActivityNoteBinding
 import ir.amirsobhan.sticknote.helper.KeyboardManager
@@ -110,7 +109,7 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun deleteDB(){
-        MaterialAlertDialogBuilder(this,R.style.AlertDialogTheme)
+        MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
             .setTitle("Are you sure you want to delete this note ?")
             .setPositiveButton("Yes") {dialog,witch -> noteViewModel.delete(note).also { finish() }}
             .setNegativeButton("No",null)

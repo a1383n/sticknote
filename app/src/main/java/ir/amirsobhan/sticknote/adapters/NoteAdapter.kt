@@ -2,6 +2,7 @@ package ir.amirsobhan.sticknote.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
-
-    var noteList: List<Note> = listOf()
+    private val TAG = "NoteAdapter"
+    var noteList: List<Note> = listOf(Note(0,"T","D",4))
 
     class ViewHolder(val binding: RowNoteBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
@@ -59,7 +60,8 @@ class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.View
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        noteList.get(position).also { holder.bind(it) }
+        noteList[position].also { holder.bind(it) }
+        Log.d(TAG, "onBindViewHolder: ${noteList[position]}")
     }
 
     override fun getItemCount() = noteList.size

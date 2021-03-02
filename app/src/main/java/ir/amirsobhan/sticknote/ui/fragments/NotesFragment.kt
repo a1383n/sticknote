@@ -22,7 +22,7 @@ class NotesFragment : Fragment() {
 
         val model : NoteViewModel by inject()
 
-        model.notes.observe(this, Observer {
+        model.notes.observe(viewLifecycleOwner, Observer {
             adapter.noteList = it
             adapter.notifyDataSetChanged()
         })

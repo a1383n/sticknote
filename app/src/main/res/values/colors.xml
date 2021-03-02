@@ -12,6 +12,8 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
+    <color name="window_bg">#F2F0F0</color>
+
     <color name="theme_mode">@color/white</color>
 
 </resources>

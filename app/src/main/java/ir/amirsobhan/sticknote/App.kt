@@ -21,6 +21,7 @@ class App : Application() {
         //Set App theme mode
         AppCompatDelegate.setDefaultNightMode(sharedPreference.getString("theme","-1")!!.toInt())
 
+
         val appModules = module {
 
             single { AppDatabase(this@App) }

@@ -7,11 +7,13 @@
     tools:context=".ui.activity.MainActivity">
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?android:actionBarSize" />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"/>
 
 
     <com.google.android.material.bottomappbar.BottomAppBar

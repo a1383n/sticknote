@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:title="Setting"
-        android:id="@+id/setting"
+        android:id="@+id/settingFragment"
         android:icon="@drawable/ic_baseline_settings_24"
         app:showAsAction="always"/>
 
     <item
         android:title="Cloud"
-        android:id="@+id/cloud"
+        android:id="@+id/cloudFragment"
         android:icon="@drawable/ic_baseline_cloud_24"
         app:showAsAction="always"/>
-
 
     <item
         android:title=""
@@ -20,13 +19,13 @@
 
     <item
         android:title="Notes"
-        android:id="@+id/notes"
+        android:id="@+id/notesFragment"
         android:icon="@drawable/ic_baseline_text_snippet_24"
         app:showAsAction="always"/>
 
     <item
         android:title="Info"
-        android:id="@+id/info"
+        android:id="@+id/infoFragment"
         android:icon="@drawable/ic_baseline_info_24"
         app:showAsAction="always"/>
 

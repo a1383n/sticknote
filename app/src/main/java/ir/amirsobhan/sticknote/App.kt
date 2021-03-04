@@ -1,11 +1,16 @@
 package ir.amirsobhan.sticknote
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.Preference
+import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.repositories.NoteRepository
+import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -30,6 +35,10 @@ class App : Application() {
             single { NoteRepository(get<AppDatabase>().noteDao()) }
 
             viewModel { NoteViewModel(get()) }
+            viewModel { CloudViewModel(this@App) }
+
+            factory<GoogleSignInOptions> { GoogleSignInOptions.Builder().requestEmail().build() }
+            factory<GoogleSignInClient> {GoogleSignIn.getClient(this@App,get())}
         }
 
         startKoin {
@@ -37,5 +46,10 @@ class App : Application() {
             androidContext(this@App)
             modules(appModules)
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }

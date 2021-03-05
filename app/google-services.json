@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1064789206835",
+    "project_id": "stickme-note-1614859369517",
+    "storage_bucket": "stickme-note-1614859369517.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064789206835:android:c242355573867a421d0046",
+        "android_client_info": {
+          "package_name": "ir.amirsobhan.sticknote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064789206835-f05pk0io19pq4d71t7ptqnnskjkhfhjl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.amirsobhan.sticknote",
+            "certificate_hash": "b26811316181e8da6dc2af2905f05461c3cb5854"
+          }
+        },
+        {
+          "client_id": "1064789206835-3370de6k7nl48sf0kl4eul1hcmm5jgb2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNnHnru5ZRHGrSDubBJM3cM3Xr8dtmgxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064789206835-3370de6k7nl48sf0kl4eul1hcmm5jgb2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

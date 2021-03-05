@@ -95,4 +95,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
     implementation 'com.google.firebase:firebase-auth-ktx'
 
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
+
 }

@@ -125,7 +125,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <Button
-                                android:id="@+id/button"
+                                android:id="@+id/syncButtom"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="15dp"

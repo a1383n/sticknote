@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
@@ -33,21 +34,25 @@ class App : Application() {
 
 
 
-        val appModules = module {
+        val viewModelModules = module {
+            viewModel { NoteViewModel(get()) }
+            viewModel { CloudViewModel() }
+        }
 
+
+        val appModules = module {
             single { AppDatabase(this@App) }
             single { AppExecutor() }
-
             single { NoteRepository(get<AppDatabase>().noteDao()) }
 
-            viewModel { NoteViewModel(get()) }
-            viewModel { CloudViewModel(this@App) }
+            //Firebase Auth
+            single { Firebase.auth }
         }
 
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(appModules)
+            modules(viewModelModules,appModules)
         }
     }
 

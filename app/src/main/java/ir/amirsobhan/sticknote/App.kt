@@ -5,15 +5,8 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import com.google.firebase.ktx.initialize
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.repositories.NoteRepository
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
@@ -24,7 +17,7 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-class App : Application() {
+class App : Application(){
     override fun onCreate() {
         super.onCreate()
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)

@@ -7,6 +7,8 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import ir.amirsobhan.sticknote.R
+import ir.amirsobhan.sticknote.database.Note
+import ir.amirsobhan.sticknote.repositories.NoteRepository
 import org.koin.java.KoinJavaComponent.inject
 
 class CloudViewModel() : ViewModel() {
@@ -17,6 +19,8 @@ class CloudViewModel() : ViewModel() {
 
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build(), AuthUI.IdpConfig.EmailBuilder().build())
     val firebaseAuth : FirebaseAuth by inject(FirebaseAuth::class.java)
+
+    val reps : NoteRepository by inject(NoteRepository::class.java)
 
     val user: FirebaseUser get() = firebaseAuth.currentUser
 

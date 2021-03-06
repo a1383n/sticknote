@@ -8,6 +8,9 @@ interface NoteDao {
     @Query("SELECT * FROM Note ORDER BY id DESC")
     fun getAll(): LiveData<List<Note>>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(noteList: List<Note>)
+
     @Insert
     fun insert(note: Note)
 

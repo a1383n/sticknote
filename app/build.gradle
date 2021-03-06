@@ -97,5 +97,9 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    // Work Manager
+    implementation "androidx.work:work-runtime-ktx:2.5.0"
+
+
 
 }

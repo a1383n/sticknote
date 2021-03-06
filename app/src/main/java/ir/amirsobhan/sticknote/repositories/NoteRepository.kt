@@ -16,6 +16,10 @@ class NoteRepository(private val noteDao: NoteDao) {
         return appExecutor.diskIO().submit(callable).get()
     }
 
+    fun insertAll(noteList: List<Note>){
+        appExecutor.diskIO().submit { Runnable { noteDao.insertAll(noteList) } }
+    }
+
     fun insert(note: Note){
         appExecutor.diskIO().submit(Runnable { noteDao.insert(note) })
     }

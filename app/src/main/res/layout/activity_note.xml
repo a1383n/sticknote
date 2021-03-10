@@ -73,7 +73,9 @@
             android:gravity="start"
             android:inputType="textMultiLine"
             android:lines="25"
-            android:minLines="25" />
+            android:minLines="25"
+            android:linksClickable="true"
+            android:autoLink="all" />
 
     </androidx.core.widget.NestedScrollView>
 

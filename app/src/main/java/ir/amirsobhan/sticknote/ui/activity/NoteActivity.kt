@@ -3,6 +3,7 @@ package ir.amirsobhan.sticknote.ui.activity
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,8 @@ class NoteActivity : AppCompatActivity() {
         setupAppBar()
         setEditText()
 
+        //Set Link Clickable
+        binding.body.movementMethod = LinkMovementMethod.getInstance()
 
     }
 

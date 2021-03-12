@@ -5,10 +5,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.google.protobuf.Api
-import com.google.rpc.RetryInfoOrBuilder
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.network.ApiService
 import ir.amirsobhan.sticknote.network.AuthInterceptor
@@ -44,9 +40,6 @@ class App : Application(){
             single { AppDatabase(this@App) }
             single { AppExecutor() }
             single { NoteRepository(get<AppDatabase>().noteDao()) }
-
-            //Firebase Auth
-            single { Firebase.auth }
         }
 
         val networkModules = module {

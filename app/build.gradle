@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'koin'
-    id 'com.google.gms.google-services'
 }
 
 android {
@@ -85,14 +84,6 @@ dependencies {
     // About page
     implementation 'com.github.medyo:android-about-page:1.3.1'
 
-    //Firebase
-    implementation platform('com.google.firebase:firebase-bom:26.6.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
-    implementation 'com.google.firebase:firebase-auth-ktx'
-
-    implementation 'com.google.firebase:firebase-firestore-ktx'
-
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:2.5.0"
 
@@ -101,5 +92,8 @@ dependencies {
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    //Google Sign In
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
 }

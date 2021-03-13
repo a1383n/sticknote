@@ -2,11 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/auth_nab"
     app:startDestination="@id/loginFragment">
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="ir.amirsobhan.sticknote.ui.fragments.auth.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="Login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
@@ -14,5 +13,5 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="ir.amirsobhan.sticknote.ui.fragments.auth.RegisterFragment"
-        android:label="RegisterFragment" />
+        android:label="Register" />
 </navigation>

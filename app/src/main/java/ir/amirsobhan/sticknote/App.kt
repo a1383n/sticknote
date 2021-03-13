@@ -9,6 +9,7 @@ import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.network.ApiService
 import ir.amirsobhan.sticknote.network.AuthInterceptor
 import ir.amirsobhan.sticknote.repositories.NoteRepository
+import ir.amirsobhan.sticknote.repositories.UserRepository
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 import okhttp3.OkHttpClient
@@ -40,6 +41,7 @@ class App : Application(){
             single { AppDatabase(this@App) }
             single { AppExecutor() }
             single { NoteRepository(get<AppDatabase>().noteDao()) }
+            single { UserRepository(this@App) }
         }
 
         val networkModules = module {

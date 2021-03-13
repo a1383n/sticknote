@@ -10,14 +10,14 @@ import okhttp3.Response
 
 class AuthInterceptor(val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val access_token = Gson().fromJson(
-            PreferenceManager.getDefaultSharedPreferences(context).getString("user",null)
-            ,User::class.java
-        ).access_token
+        val user_json : String? = PreferenceManager.getDefaultSharedPreferences(context).getString("user",null)
+        val user : User? = if (user_json != null) Gson().fromJson(user_json,User::class.java) else null
+        val access_token : String? = if (user != null) user.access_token else null
+
         var req = chain.request()
 
 
-        if (access_token.isEmpty()){
+        if (access_token.isNullOrEmpty()){
             val headers_list = Headers.of(mapOf(
                 "Authorization" to "Bearer $access_token",
                 "Accept" to "application/json"

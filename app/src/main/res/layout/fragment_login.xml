@@ -57,18 +57,33 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <TextView
+            android:id="@+id/login_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/password_layout"
+            app:layout_constraintStart_toStartOf="@+id/password_layout"
+            app:layout_constraintTop_toBottomOf="@+id/password_layout" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="Login"
             app:icon="@drawable/ic_baseline_login_24"
             app:layout_constraintEnd_toEndOf="@+id/password_layout"
             app:layout_constraintStart_toStartOf="@+id/password_layout"
-            app:layout_constraintTop_toBottomOf="@+id/password_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/login_error" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/resetPasswordButton"
@@ -121,5 +136,6 @@
             app:layout_constraintEnd_toEndOf="@+id/googleSignInBtn"
             app:layout_constraintStart_toStartOf="@+id/googleSignInBtn"
             app:layout_constraintTop_toBottomOf="@+id/googleSignInBtn" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

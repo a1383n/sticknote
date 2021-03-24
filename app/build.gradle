@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'koin'
+    id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
 }
 
@@ -64,6 +65,9 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.activity:activity-ktx:1.2.0"
 
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+
     //Navigation Components
     def nav_version = "2.3.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -88,11 +92,11 @@ dependencies {
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:2.5.0"
 
-
-    // Retrofit
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     //Google Sign In
     implementation 'com.google.android.gms:play-services-auth:19.0.0'

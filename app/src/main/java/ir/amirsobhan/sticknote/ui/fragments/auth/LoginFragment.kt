@@ -1,5 +1,6 @@
 package ir.amirsobhan.sticknote.ui.fragments.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -8,44 +9,49 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
-import ir.amirsobhan.sticknote.network.OnCompleteListener
-import ir.amirsobhan.sticknote.network.ResultBody
-import ir.amirsobhan.sticknote.network.ResultHandler
-import ir.amirsobhan.sticknote.repositories.UserRepository
-import org.koin.android.ext.android.inject
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val userRepository : UserRepository by inject()
     private val TAG = "LoginFragment"
+    private lateinit var auth : FirebaseAuth
 
     override fun onCreateView(inflater: LayoutInflater,  container: ViewGroup?,savedInstanceState: Bundle?): View? {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
 
         init()
 
+        binding.loginButton.setOnClickListener {
+            if (formValidation()){
+                auth.signInWithEmailAndPassword(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
+                    .addOnSuccessListener {
+
+                    }
+                    .addOnFailureListener {
+                       binding.loginError.apply {
+                           visibility = View.VISIBLE
+                           text = it.message
+                       }
+                    }
+            }
+        }
+        binding.googleSignInBtn.setOnClickListener { googleSignInRequest().also { binding.googleSignInBtn.isEnabled = false } }
+
         return binding.root
     }
 
     fun init() {
         binding.registerButton.setOnClickListener { findNavController().navigate(R.id.action_loginFragment_to_registerFragment) }
-        binding.loginButton.setOnClickListener {
-            if (formValidation()) {
-                val result = userRepository.loginUser(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
-                ResultHandler.handleResponse(result, object : OnCompleteListener {
-                    override fun onSuccess(resultBody: ResultBody?) {
-                        Log.d(TAG, "onSuccess: ${resultBody.toString()}")
-                    }
-
-                    override fun onError(resultBody: ResultBody) {
-                        Log.d(TAG, "onError: ${resultBody.toString()}")
-                    }
-                })
-            }
-        }
+        auth = Firebase.auth
     }
 
     fun formValidation(): Boolean {
@@ -65,6 +71,41 @@ class LoginFragment : Fragment() {
             binding.passwordLayout.isErrorEnabled = false
             binding.passwordLayout.error = null
             return true
+        }
+    }
+
+    fun googleSignInRequest(){
+        val gso = GoogleSignInOptions.Builder()
+            .requestIdToken("1064789206835-b6rnpf9adkfq5s29evctk067ce2opjai.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(requireContext(),gso)
+
+        startActivityForResult(googleSignInClient.signInIntent,15)
+    }
+
+    fun firebaseAuthWithGoogle(idToken : String){
+        val credential = GoogleAuthProvider.getCredential(idToken,null)
+        auth.signInWithCredential(credential)
+            .addOnSuccessListener {
+                Log.d(TAG, "firebaseAuthWithGoogle: ${it.user.email}")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "firebaseAuthWithGoogle: ${it.message}")
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 15){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            }catch (e : ApiException){
+
+            }
         }
     }
 }

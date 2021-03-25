@@ -111,12 +111,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:icon="@drawable/ic_baseline_how_to_reg_24"
         android:text="Register"
+        app:icon="@drawable/ic_baseline_how_to_reg_24"
         app:layout_constraintEnd_toEndOf="@+id/passwordConInputLayout"
         app:layout_constraintStart_toStartOf="@+id/passwordConInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/passwordConInputLayout" />
+        app:layout_constraintTop_toBottomOf="@id/passwordConInputLayout" />
+
+    <TextView
+        android:id="@+id/register_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/registerButton"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -45,6 +46,7 @@ class LoginFragment : Fragment() {
             }
         }
         binding.googleSignInBtn.setOnClickListener { googleSignInRequest().also { binding.googleSignInBtn.isEnabled = false } }
+        binding.resetPasswordButton.setOnClickListener { findNavController().navigate(R.id.action_loginFragment_to_restPasswordFragment, bundleOf("email" to binding.inputEmail.text.toString())) }
 
         return binding.root
     }

@@ -11,6 +11,11 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     val appExecutor : AppExecutor by inject(AppExecutor::class.java)
 
+    fun exportAll() : List<Note>{
+        val callable : Callable<List<Note>> = Callable { return@Callable noteDao.exportAll() }
+        return appExecutor.diskIO().submit(callable).get()
+    }
+
     fun getAll() : LiveData<List<Note>> {
         var callable: Callable<LiveData<List<Note>>> = Callable { return@Callable noteDao.getAll() }
         return appExecutor.diskIO().submit(callable).get()

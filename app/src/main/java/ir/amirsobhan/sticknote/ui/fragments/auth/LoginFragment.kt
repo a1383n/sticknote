@@ -7,9 +7,13 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -19,6 +23,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
+import ir.amirsobhan.sticknote.worker.FirstSync
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -35,7 +40,10 @@ class LoginFragment : Fragment() {
             if (formValidation()){
                 auth.signInWithEmailAndPassword(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
                     .addOnSuccessListener {
-
+                        val data : Intent = Intent()
+                        data.putExtra("name",it.user.displayName)
+                        activity?.setResult(AppCompatActivity.RESULT_OK,data)
+                        activity?.finish()
                     }
                     .addOnFailureListener {
                        binding.loginError.apply {
@@ -91,7 +99,10 @@ class LoginFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(idToken,null)
         auth.signInWithCredential(credential)
             .addOnSuccessListener {
-                Log.d(TAG, "firebaseAuthWithGoogle: ${it.user.email}")
+                val data : Intent = Intent()
+                data.putExtra("name",it.user.displayName)
+                activity?.setResult(AppCompatActivity.RESULT_OK,data)
+                activity?.finish()
             }
             .addOnFailureListener {
                 Log.d(TAG, "firebaseAuthWithGoogle: ${it.message}")

@@ -5,6 +5,9 @@ import androidx.room.*
 
 @Dao
 interface NoteDao {
+    @Query("SELECT * FROM Note ORDER BY timestamp DESC")
+    fun exportAll() : List<Note>
+
     @Query("SELECT * FROM Note ORDER BY id DESC")
     fun getAll(): LiveData<List<Note>>
 

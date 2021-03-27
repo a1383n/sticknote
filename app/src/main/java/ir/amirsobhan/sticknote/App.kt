@@ -27,7 +27,7 @@ class App : Application(){
 
         val viewModelModules = module {
             viewModel { NoteViewModel(get()) }
-            viewModel { CloudViewModel() }
+            viewModel { CloudViewModel(this@App) }
         }
 
 

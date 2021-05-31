@@ -16,7 +16,7 @@ import java.util.*
 
 class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     private val TAG = "NoteAdapter"
-    var noteList: List<Note> = listOf(Note(0,"T","D",4))
+    var noteList: MutableList<Note> = mutableListOf()
 
     class ViewHolder(val binding: RowNoteBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {

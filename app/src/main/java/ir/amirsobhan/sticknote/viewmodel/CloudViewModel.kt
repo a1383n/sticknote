@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.database.Note
@@ -23,7 +25,7 @@ class CloudViewModel(val context : Context) : ViewModel() {
     fun getLastSyncDate() : String{
         if (sharedPreferences.getLong("last_sync",0L) != 0L){
             return "Last sync:" + DateUtils.getRelativeTimeSpanString(
-                    System.currentTimeMillis(),sharedPreferences.getLong("last_sync",0L),0
+                    sharedPreferences.getLong("last_sync",0L),System.currentTimeMillis(),0
             ).toString()
         }else{
             return "Last sync: Never"

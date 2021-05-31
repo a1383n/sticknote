@@ -1,5 +1,6 @@
 package ir.amirsobhan.sticknote.ui.fragments.auth
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,29 +8,32 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
-import ir.amirsobhan.sticknote.worker.FirstSync
+import ir.amirsobhan.sticknote.ui.activity.AuthActivity
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val TAG = "LoginFragment"
     private lateinit var auth : FirebaseAuth
+    private lateinit var display_name : String
+
+    val data : Intent = Intent()
 
     override fun onCreateView(inflater: LayoutInflater,  container: ViewGroup?,savedInstanceState: Bundle?): View? {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
@@ -40,9 +44,7 @@ class LoginFragment : Fragment() {
             if (formValidation()){
                 auth.signInWithEmailAndPassword(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
                     .addOnSuccessListener {
-                        val data : Intent = Intent()
-                        data.putExtra("name",it.user.displayName)
-                        activity?.setResult(AppCompatActivity.RESULT_OK,data)
+                        activity?.setResult(Activity.RESULT_OK,data)
                         activity?.finish()
                     }
                     .addOnFailureListener {
@@ -87,6 +89,7 @@ class LoginFragment : Fragment() {
     fun googleSignInRequest(){
         val gso = GoogleSignInOptions.Builder()
             .requestIdToken("1064789206835-b6rnpf9adkfq5s29evctk067ce2opjai.apps.googleusercontent.com")
+                .requestScopes(Scope("profile"))
             .requestEmail()
             .build()
 
@@ -99,9 +102,15 @@ class LoginFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(idToken,null)
         auth.signInWithCredential(credential)
             .addOnSuccessListener {
-                val data : Intent = Intent()
+                val userProfileChangeRequest = UserProfileChangeRequest.Builder()
+                        .setDisplayName(this.display_name)
+                        .build()
+
+                it.user.updateProfile(userProfileChangeRequest)
+
+
                 data.putExtra("name",it.user.displayName)
-                activity?.setResult(AppCompatActivity.RESULT_OK,data)
+                activity?.setResult(Activity.RESULT_OK,data)
                 activity?.finish()
             }
             .addOnFailureListener {
@@ -115,6 +124,7 @@ class LoginFragment : Fragment() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
+                display_name = account.displayName!!
                 firebaseAuthWithGoogle(account.idToken!!)
             }catch (e : ApiException){
 

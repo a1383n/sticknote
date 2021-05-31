@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
@@ -48,7 +47,7 @@ class NoteActivity : AppCompatActivity() {
             binding.body.setText(note.text)
             binding.collapsingToolbarLayout.title = note.title
         }else{
-            note = Note(null,"","",System.currentTimeMillis())
+            note = Note(title = "",text = "")
         }
     }
 
@@ -94,10 +93,8 @@ class NoteActivity : AppCompatActivity() {
     private fun insertToDB() {
         noteViewModel.insert(
             Note(
-                null,
-                binding.toolbarEditText.text.toString(),
-                binding.body.text.toString(),
-                System.currentTimeMillis()
+                title = binding.toolbarEditText.text.toString(),
+                text = binding.body.text.toString(),
             )
         )
 

@@ -1,5 +1,7 @@
 package ir.amirsobhan.sticknote.ui.fragments.auth
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ class RegisterFragment : Fragment() {
     private var _binding : FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth : FirebaseAuth
+    val data : Intent = Intent()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRegisterBinding.inflate(layoutInflater,container,false)
@@ -30,7 +33,12 @@ class RegisterFragment : Fragment() {
                         .build()
 
                 auth.createUserWithEmailAndPassword(binding.inputEmail.text.toString(),binding.passwordInput.text.toString())
-                        .addOnSuccessListener { it.user.updateProfile(userProfile) }
+                        .addOnSuccessListener {
+                            it.user.updateProfile(userProfile)
+                            activity?.setResult(Activity.RESULT_OK)
+                            activity?.finish()
+
+                        }
                         .addOnFailureListener { binding.registerError.apply {
                             visibility = View.VISIBLE
                             text = it.message

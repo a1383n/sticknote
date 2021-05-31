@@ -23,7 +23,7 @@ class NotesFragment : Fragment() {
         val model : NoteViewModel by inject()
 
         model.notes.observe(viewLifecycleOwner, Observer {
-            adapter.noteList = it
+            adapter.noteList = it.toMutableList()
             adapter.notifyDataSetChanged()
         })
         binding.recyclerView.adapter = adapter

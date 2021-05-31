@@ -1,4 +1,4 @@
-          package ir.amirsobhan.sticknote.ui.fragments
+  package ir.amirsobhan.sticknote.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -7,25 +7,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.databinding.FragmentCloudBinding
+import ir.amirsobhan.sticknote.repositories.NoteRepository
 import ir.amirsobhan.sticknote.ui.activity.AuthActivity
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
+import ir.amirsobhan.sticknote.worker.AutoSync
 import org.koin.android.ext.android.inject
 
-
-          class CloudFragment : Fragment(){
+class CloudFragment : Fragment(){
     private val TAG = "CloudFragment"
     private var _binding : FragmentCloudBinding? = null
     private val binding get() = _binding!!
     private val viewModel : CloudViewModel by inject()
     private val auth : FirebaseAuth = Firebase.auth
-    private val isUserSignedIn : Boolean get() = auth.currentUser != null
+    private val isUserSignedIn :
+            Boolean get() = auth.currentUser != null
+    private val noteRepository : NoteRepository by inject()
+    val workManager : WorkManager by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         _binding = FragmentCloudBinding.inflate(layoutInflater, container, false)
@@ -38,7 +42,11 @@ import org.koin.android.ext.android.inject
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 10 && resultCode == Activity.RESULT_OK){
-            Snackbar.make(requireView(),"Welcome ${data?.getStringExtra("name")}",Snackbar.LENGTH_LONG).show()
+            Toast.makeText(context,"Welcome, Sync in progress...",Toast.LENGTH_SHORT).show()
+
+            workManager.enqueue(AutoSync.Factory(AutoSync.SYNC))
+
+            updateUI()
         }
     }
 
@@ -50,15 +58,7 @@ import org.koin.android.ext.android.inject
 
             binding.syncButtom.setOnClickListener {
                 binding.syncButtom.isEnabled = false
-                viewModel.putNotesToRemote()
-                        .addOnCompleteListener {
-                            binding.syncButtom.isEnabled = true
-                            if (!it.isSuccessful){
-                                Toast.makeText(context,it.exception?.message,Toast.LENGTH_LONG).show()
-                            }else{
-                                binding.lastSync.text = "Last sync: Now"
-                            }
-                        }
+                workManager.enqueue(AutoSync.Factory(AutoSync.SYNC))
             }
 
         }else{

@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
 import ir.amirsobhan.sticknote.ui.activity.AuthActivity
+import org.koin.android.ext.android.inject
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
@@ -87,11 +88,7 @@ class LoginFragment : Fragment() {
     }
 
     fun googleSignInRequest(){
-        val gso = GoogleSignInOptions.Builder()
-            .requestIdToken("1064789206835-b6rnpf9adkfq5s29evctk067ce2opjai.apps.googleusercontent.com")
-                .requestScopes(Scope("profile"))
-            .requestEmail()
-            .build()
+        val gso : GoogleSignInOptions by inject()
 
         val googleSignInClient = GoogleSignIn.getClient(requireContext(),gso)
 
@@ -106,10 +103,10 @@ class LoginFragment : Fragment() {
                         .setDisplayName(this.display_name)
                         .build()
 
-                it.user.updateProfile(userProfileChangeRequest)
+                it.user?.updateProfile(userProfileChangeRequest)
 
 
-                data.putExtra("name",it.user.displayName)
+                data.putExtra("name",it.user?.displayName)
                 activity?.setResult(Activity.RESULT_OK,data)
                 activity?.finish()
             }

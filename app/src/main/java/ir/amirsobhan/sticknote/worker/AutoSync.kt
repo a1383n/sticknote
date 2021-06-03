@@ -47,7 +47,7 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
             Log.d(TAG,"User not login")
             return Result.failure()
         }else{
-            doc = firestore.document("users/${Firebase.auth.currentUser.uid}")
+            doc = firestore.document("users/${Firebase.auth.currentUser?.uid}")
         }
 
         when (action) {

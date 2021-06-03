@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
 
                 auth.createUserWithEmailAndPassword(binding.inputEmail.text.toString(),binding.passwordInput.text.toString())
                         .addOnSuccessListener {
-                            it.user.updateProfile(userProfile)
+                            it.user?.updateProfile(userProfile)
                             activity?.setResult(Activity.RESULT_OK)
                             activity?.finish()
 

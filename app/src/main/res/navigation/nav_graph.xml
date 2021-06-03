@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_settingFragment_to_cloudFragment"
             app:destination="@id/cloudFragment" />
+        <action
+            android:id="@+id/action_settingFragment_self"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/cloudFragment"
@@ -35,4 +41,8 @@
             android:id="@+id/action_notesFragment_to_infoFragment"
             app:destination="@id/infoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ir.amirsobhan.sticknote.ui.fragments.ProfileFragment"
+        android:label="ProfileFragment" />
 </navigation>

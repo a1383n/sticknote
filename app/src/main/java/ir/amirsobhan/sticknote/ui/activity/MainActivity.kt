@@ -2,27 +2,23 @@ package ir.amirsobhan.sticknote.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.ActivityMainBinding
 import ir.amirsobhan.sticknote.repositories.NoteRepository
-import ir.amirsobhan.sticknote.worker.AutoSync
+import ir.amirsobhan.sticknote.ui.fragments.SettingFragmentDirections
 import org.koin.android.ext.android.inject
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
-    private val noteRepository : NoteRepository by inject()
+    private val noteRepository: NoteRepository by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,14 +36,18 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
         NavigationUI.setupWithNavController(activityMainBinding.bottomNavigation, navHostFragment!!.navController)
 
+        navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
+            activityMainBinding.bottomBar.isVisible = destination.label != "ProfileFragment"
+            activityMainBinding.floatingAction.isVisible = destination.label != "ProfileFragment"
+        }
 
         // Add Corner to BottomBar
         var radius = resources.getDimension(R.dimen.bottom_nav_corner)
         val bottomBarBackground = activityMainBinding.bottomBar.background as MaterialShapeDrawable
         bottomBarBackground.shapeAppearanceModel = bottomBarBackground.shapeAppearanceModel
-            .toBuilder()
-            .setTopRightCorner(CornerFamily.ROUNDED, radius)
-            .setTopLeftCorner(CornerFamily.ROUNDED, radius)
-            .build()
+                .toBuilder()
+                .setTopRightCorner(CornerFamily.ROUNDED, radius)
+                .setTopLeftCorner(CornerFamily.ROUNDED, radius)
+                .build()
     }
 }

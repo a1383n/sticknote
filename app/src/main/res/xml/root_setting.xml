@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory
+        android:title="Account">
+        <Preference
+            android:key="account_info"
+            android:icon="@drawable/ic_baseline_person_24">
+        </Preference>
+        <Preference
+            android:key="account_edit"
+            android:title="Edit account information"
+            android:icon="@drawable/account_edit"/>
+        <Preference
+            android:key="account_verify"
+            android:title="Verify email"
+            android:icon="@drawable/email_check"
+            android:summary="Your email is not verified\nTap to send verify link"
+            app:isPreferenceVisible="false"/>
+        <Preference
+            android:key="account_logout"
+            android:title="Logout"
+            android:icon="@drawable/logout"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="General">
-
         <ListPreference
             android:key="theme"
             android:title="Theme"
@@ -11,6 +36,5 @@
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:defaultValue="-1"/>
-
     </PreferenceCategory>
 </PreferenceScreen>

@@ -7,10 +7,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.repositories.NoteRepository
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
@@ -39,6 +43,11 @@ class App : Application(), androidx.work.Configuration.Provider{
             single { PreferenceManager.getDefaultSharedPreferences(this@App) }
             single { NoteRepository(get<AppDatabase>().noteDao()) }
             single { WorkManager.getInstance(this@App) }
+            single { GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("1064789206835-b6rnpf9adkfq5s29evctk067ce2opjai.apps.googleusercontent.com")
+                    .requestScopes(Scope("profile"))
+                    .requestEmail()
+                    .build() }
         }
 
 
@@ -53,8 +62,10 @@ class App : Application(), androidx.work.Configuration.Provider{
         if (BuildConfig.DEBUG && isEmulator()) {
             Firebase.auth.useEmulator("10.0.2.2", 9099)
             Firebase.firestore.useEmulator("10.0.2.2", 8080)
+            Firebase.storage.useEmulator("10.0.2.2",9199)
             Firebase.firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().apply { isPersistenceEnabled = false }.build()
         }
+
     }
 
     private fun isEmulator(): Boolean {

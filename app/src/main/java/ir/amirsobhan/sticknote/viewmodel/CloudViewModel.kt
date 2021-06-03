@@ -35,7 +35,7 @@ class CloudViewModel(val context : Context) : ViewModel() {
     fun putNotesToRemote(): Task<Void> {
         val list : List<Note> = repository.exportAll()
 
-        return firestore.collection("users").document(Firebase.auth.currentUser.uid)
+        return firestore.collection("users").document(Firebase.auth.currentUser?.uid.toString())
                 .set(hashMapOf(
                         "notes" to list,
                         "last_sync" to System.currentTimeMillis()

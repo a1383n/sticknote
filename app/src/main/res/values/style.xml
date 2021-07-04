@@ -4,10 +4,4 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-
-    <declare-styleable name="actionbar_progress_style">
-        <attr name="android:width">30dp</attr>
-        <attr name="android:height">30dp</attr>
-    </declare-styleable>
-
 </resources>

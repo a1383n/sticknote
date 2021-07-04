@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import ir.amirsobhan.sticknote.ui.activity.NoteActivity
 import ir.amirsobhan.sticknote.database.Note
@@ -27,6 +30,7 @@ class NoteAdapter(val context: Context?) : RecyclerView.Adapter<NoteAdapter.View
             binding.time.text = getDateTime(note.timestamp)
 
             binding.root.setOnClickListener {
+
                 var intent = Intent(context, NoteActivity::class.java)
                 intent.putExtra("json", Gson().toJson(note))
                 context.startActivity(intent)

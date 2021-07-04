@@ -9,11 +9,15 @@ import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.perf.ktx.performance
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.firebase.storage.ktx.storage
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.repositories.NoteRepository
@@ -36,8 +40,6 @@ class App : Application(), androidx.work.Configuration.Provider{
             viewModel { NoteViewModel(get()) }
             viewModel { CloudViewModel(this@App) }
         }
-
-
         val appModules = module {
             single { AppDatabase(this@App) }
             single { PreferenceManager.getDefaultSharedPreferences(this@App) }
@@ -48,9 +50,8 @@ class App : Application(), androidx.work.Configuration.Provider{
                     .requestScopes(Scope("profile"))
                     .requestEmail()
                     .build() }
+
         }
-
-
         startKoin {
             androidLogger()
             androidContext(this@App)
@@ -66,6 +67,21 @@ class App : Application(), androidx.work.Configuration.Provider{
             Firebase.firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().apply { isPersistenceEnabled = false }.build()
         }
 
+        // Start and config firebase services
+        Firebase.crashlytics
+        Firebase.performance
+
+        Firebase.auth.currentUser?.uid?.let {
+            Firebase.crashlytics.setUserId(it)
+            Firebase.analytics.setUserId(it)
+        }
+
+        Firebase.remoteConfig.setDefaultsAsync(mapOf(
+            "app_version" to BuildConfig.VERSION_NAME.toDouble(),
+            "fetch_interval" to if (BuildConfig.DEBUG) 0 else 3600
+        ))
+        Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig.getLong("fetch_interval") })
+        Firebase.remoteConfig.fetchAndActivate()
     }
 
     private fun isEmulator(): Boolean {

@@ -1,6 +1,7 @@
 package ir.amirsobhan.sticknote.ui.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -9,10 +10,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -27,16 +30,25 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.perf.FirebasePerformance
+import com.google.firebase.perf.ktx.performance
+import com.google.firebase.perf.ktx.trace
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentProfileBinding
+import ir.amirsobhan.sticknote.ui.fragments.auth.EmailChangeFragment
 import ir.amirsobhan.sticknote.ui.fragments.auth.PhoneVerificationFragment
 import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 
 class ProfileFragment : Fragment() {
+    val TAG = "ProfileFragment"
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     val auth = Firebase.auth
@@ -57,7 +69,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationOnClickListener {
+            val inputMethodManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+            findNavController().navigateUp()
+        }
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.profile_menu_save -> if (verifyInputs()) {startRouting()}
@@ -75,13 +91,18 @@ class ProfileFragment : Fragment() {
     }
 
     private fun startRouting(){
+        Log.d(TAG, "startRouting: ")
+        loading(true)
+
         if (isPasswordChangeRequest()){
+            Log.d(TAG, "startRouting: Password change request")
             if (verifyPasswordsInputs()){
                 user.updatePassword(binding.proPassInput.text.toString())
             }
         }
 
         if (isPhoneChangeRequest() && !isEmailChangeRequest()){
+            Log.d(TAG, "startRouting: Start phone verify")
             val phoneVerificationFragment = PhoneVerificationFragment(binding.proPhoneInput.text.toString())
             phoneVerificationFragment.show(parentFragmentManager,"Phone")
 
@@ -92,13 +113,24 @@ class ProfileFragment : Fragment() {
             })
 
         }else if(!isPhoneChangeRequest() && isEmailChangeRequest()){
+            val emailVerificationFragment = EmailChangeFragment(binding.proEmailInput.text.toString())
+            emailVerificationFragment.show(parentFragmentManager,"Email")
+            emailVerificationFragment.isEmailChange.observe(viewLifecycleOwner, Observer {
+                if (it){
+                    exit()
+                }
+            })
+            emailVerificationFragment.isEmailChangeError.observe(viewLifecycleOwner, Observer {
+                binding.proEmailLy.error = null
+                if (it.first){
+                    binding.proEmailLy.error = it.second
+                    loading(false)
+                }
+            })
+        }else if (isPhoneChangeRequest() && isEmailChangeRequest()){
 
-        }else if (isPhoneChangeRequest() && isEmailChangeRequest())
-
-        if (profileUri != user.photoUrl){
-            uploadProfileImage()
         }else{
-            saveUserProfile()
+            exit()
         }
     }
 
@@ -122,46 +154,36 @@ class ProfileFragment : Fragment() {
     }
 
     private fun uploadProfileImage() {
+        Log.d(TAG,"Uploading new profile image")
         loading(true)
         val imageRef = storage.reference.child("users/${user.uid}.jpg")
         val userProfileChangeRequest = UserProfileChangeRequest.Builder()
                 .setDisplayName(binding.proNameInput.text.toString())
 
-        if (profileUri != user.photoUrl) {
-            //Changing profile image
+        //Changing profile image
             val baos = ByteArrayOutputStream()
             centerCropImage(profileUri!!).compress(Bitmap.CompressFormat.JPEG, 50, baos)
             val data = baos.toByteArray()
 
             imageRef.putBytes(data)
                     .addOnSuccessListener {
+                        Log.d(TAG,"Upload success")
                         imageRef.downloadUrl
                                 .addOnSuccessListener {
+                                    Log.d(TAG,"Uploaded image url : $it")
                                     userProfileChangeRequest.photoUri = it
                                     saveUserProfile(userProfileChangeRequest.build())
                                 }
                     }
-        } else {
-            saveUserProfile(userProfileChangeRequest.build())
-        }
     }
 
     private fun saveUserProfile(userProfileChangeRequest: UserProfileChangeRequest = UserProfileChangeRequest.Builder().setDisplayName(binding.proNameInput.text.toString()).build()) {
+        Log.d(TAG, "saveUserProfile: ")
         user.updateProfile(userProfileChangeRequest)
-                .addOnSuccessListener { exit() }
+                .addOnSuccessListener { findNavController().navigateUp().also { loading(false) } }
                 .addOnFailureListener { Snackbar.make(requireView(), it.message.toString(), Snackbar.LENGTH_LONG).show().also { loading(false) } }
     }
-
-    private fun verifyPhoneNumber(callback : PhoneAuthProvider.OnVerificationStateChangedCallbacks) {
-        val phoneAuthOptions = PhoneAuthOptions.Builder(auth)
-                .setPhoneNumber(binding.proPhoneInput.text.toString())
-                .setTimeout(120L, TimeUnit.SECONDS)
-                .setCallbacks(callback)
-                .setActivity(requireActivity())
-                .build()
-        PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions)
-    }
-
+    
     private fun verifyInputs(): Boolean {
         binding.proNameLy.isErrorEnabled = true
         binding.proEmailLy.isErrorEnabled = true
@@ -234,7 +256,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun isPhoneChangeRequest() : Boolean{
-        return !binding.proPhoneInput.text.isNullOrBlank()
+        return binding.proPhoneInput.text.toString() != user.phoneNumber
     }
 
     private fun isEmailChangeRequest() : Boolean{
@@ -242,7 +264,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun exit(){
-        findNavController().navigateUp().also { loading(false) }
+        if (profileUri != user.photoUrl){
+            uploadProfileImage()
+        }else{
+            saveUserProfile()
+        }
     }
 
     private fun centerCropImage(imageUri: Uri): Bitmap {

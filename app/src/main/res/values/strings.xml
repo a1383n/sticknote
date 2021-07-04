@@ -10,4 +10,11 @@
     <string name="untitled">Untitled</string>
 
     <string name="phone_verification_des">A text message with a verification code has now been sent to your phone number</string>
+    <string name="email_change_pass_verify">Enter your password to send verification link to new email:</string>
+    <string name="email_change_google_verify">SignIn again to send verification link to new email:</string>
+    <string name="email_change_link_send">A verification link send has now been sent to your new email</string>
+
+    <string name="permission_denied">Permission Denied</string>
+    <string name="permission_denied_message">Without this permission the app is unable to download new and install new version.Are you sure you want to deny this permission?</string>
+    <string name="permission_dialog_block">We cannot show your runtime permission dialog box. Please pass this permission to us from the Setting->Apps->StickMe Note->Permissions->Files and media->Allow access</string>
 </resources>

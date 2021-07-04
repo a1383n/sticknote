@@ -26,6 +26,7 @@ import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
 import ir.amirsobhan.sticknote.ui.activity.AuthActivity
 import org.koin.android.ext.android.inject
+import java.lang.RuntimeException
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null

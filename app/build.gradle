@@ -21,8 +21,6 @@ android {
         versionName "1.0"
 
         multiDexEnabled true
-
-        buildConfigField "String","DEBUG_API_URL","\"http://10.0.3.2/api/\""
     }
 
     buildTypes {

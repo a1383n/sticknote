@@ -29,10 +29,10 @@
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/fake_bg"
-                android:backgroundTint="@color/theme_mode"
                 app:labelVisibilityMode="unlabeled"
-                app:menu="@menu/bottom_nav" />
+                app:menu="@menu/bottom_nav"
+                android:background="@drawable/fake_bg"
+                app:itemIconTint="@color/nav_color"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 

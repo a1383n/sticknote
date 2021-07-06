@@ -28,10 +28,17 @@
         <activity android:name=".ui.activity.NoteActivity" />
         <activity android:name=".ui.activity.AuthActivity"/>
 
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/accent"/>
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

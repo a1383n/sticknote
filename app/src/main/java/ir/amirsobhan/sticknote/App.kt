@@ -3,6 +3,7 @@ package ir.amirsobhan.sticknote
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
@@ -15,6 +16,7 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.perf.ktx.performance
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -70,6 +72,7 @@ class App : Application(), androidx.work.Configuration.Provider{
         // Start and config firebase services
         Firebase.crashlytics
         Firebase.performance
+        Firebase.messaging
 
         Firebase.auth.currentUser?.uid?.let {
             Firebase.crashlytics.setUserId(it)
@@ -82,6 +85,10 @@ class App : Application(), androidx.work.Configuration.Provider{
         ))
         Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig.getLong("fetch_interval") })
         Firebase.remoteConfig.fetchAndActivate()
+
+        Firebase.messaging.token.addOnSuccessListener {
+            Log.d("Notification_token",it)
+        }
     }
 
     private fun isEmulator(): Boolean {

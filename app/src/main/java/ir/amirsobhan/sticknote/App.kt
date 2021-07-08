@@ -48,7 +48,7 @@ class App : Application(), androidx.work.Configuration.Provider{
             single { NoteRepository(get<AppDatabase>().noteDao()) }
             single { WorkManager.getInstance(this@App) }
             single { GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("1064789206835-b6rnpf9adkfq5s29evctk067ce2opjai.apps.googleusercontent.com")
+                    .requestIdToken("407197468075-hvl6n5tldj9pngajraeevhkegt4ndu9q.apps.googleusercontent.com")
                     .requestScopes(Scope("profile"))
                     .requestEmail()
                     .build() }
@@ -70,7 +70,7 @@ class App : Application(), androidx.work.Configuration.Provider{
         }
 
         // Start and config firebase services
-        Firebase.crashlytics
+        Firebase.analytics
         Firebase.performance
         Firebase.messaging
 

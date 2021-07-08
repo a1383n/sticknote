@@ -125,7 +125,7 @@ class LoginFragment : Fragment() {
                 display_name = account.displayName!!
                 firebaseAuthWithGoogle(account.idToken!!)
             }catch (e : ApiException){
-
+                Log.e(TAG,e.message,e)
             }
         }
     }

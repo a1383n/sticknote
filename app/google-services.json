@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "1064789206835",
-    "project_id": "stickme-note-1614859369517",
-    "storage_bucket": "stickme-note-1614859369517.appspot.com"
+    "project_number": "407197468075",
+    "project_id": "stickmenote",
+    "storage_bucket": "stickmenote.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1064789206835:android:c242355573867a421d0046",
+        "mobilesdk_app_id": "1:407197468075:android:59ebd47b0adcc5b4453eee",
         "android_client_info": {
           "package_name": "ir.amirsobhan.sticknote"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1064789206835-f05pk0io19pq4d71t7ptqnnskjkhfhjl.apps.googleusercontent.com",
+          "client_id": "407197468075-gt8mt13ev3o15ch6gc0hhihn6u0kcahb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ir.amirsobhan.sticknote",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "1064789206835-3370de6k7nl48sf0kl4eul1hcmm5jgb2.apps.googleusercontent.com",
+          "client_id": "407197468075-hvl6n5tldj9pngajraeevhkegt4ndu9q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBNnHnru5ZRHGrSDubBJM3cM3Xr8dtmgxQ"
+          "current_key": "AIzaSyDfwFVl6MqZsbFsXDphKOas-ixRe7-QMQM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1064789206835-3370de6k7nl48sf0kl4eul1hcmm5jgb2.apps.googleusercontent.com",
+              "client_id": "407197468075-hvl6n5tldj9pngajraeevhkegt4ndu9q.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

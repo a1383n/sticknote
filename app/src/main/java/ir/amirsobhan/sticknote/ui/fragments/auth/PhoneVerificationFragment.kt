@@ -28,6 +28,7 @@ class PhoneVerificationFragment(val phoneNumber : String) : BottomSheetDialogFra
     val binding get() = _binding!!
     val auth = Firebase.auth
     val isPhoneVerified : MutableLiveData<Boolean> = MutableLiveData(false)
+    val isPhoneVerifiedError : MutableLiveData<Pair<Boolean,String>> = MutableLiveData(Pair(false,""))
     var verificationID : String? = null
     var resendingToken : PhoneAuthProvider.ForceResendingToken? = null
 
@@ -105,6 +106,8 @@ class PhoneVerificationFragment(val phoneNumber : String) : BottomSheetDialogFra
                 } else if (p0 is FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
                 }
+
+                isPhoneVerifiedError.postValue(Pair(true,p0.message!!))
             }
 
         }

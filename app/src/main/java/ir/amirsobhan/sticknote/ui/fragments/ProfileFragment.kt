@@ -128,7 +128,32 @@ class ProfileFragment : Fragment() {
                 }
             })
         }else if (isPhoneChangeRequest() && isEmailChangeRequest()){
-
+            Log.d(TAG, "startRouting: Start phone verify")
+            val phoneVerificationFragment = PhoneVerificationFragment(binding.proPhoneInput.text.toString())
+            phoneVerificationFragment.show(parentFragmentManager,"Phone")
+            phoneVerificationFragment.isPhoneVerified.observe(viewLifecycleOwner, Observer {
+                if (it){
+                    val emailVerificationFragment = EmailChangeFragment(binding.proEmailInput.text.toString())
+                    emailVerificationFragment.show(parentFragmentManager,"Email")
+                    emailVerificationFragment.isEmailChange.observe(viewLifecycleOwner, Observer {
+                        if (it){
+                            exit()
+                        }
+                    })
+                    emailVerificationFragment.isEmailChangeError.observe(viewLifecycleOwner, Observer {
+                        binding.proEmailLy.error = null
+                        if (it.first){
+                            binding.proEmailLy.error = it.second
+                            loading(false)
+                        }
+                    })
+                }
+            })
+            phoneVerificationFragment.isPhoneVerifiedError.observe(viewLifecycleOwner, Observer {
+                if(it.first){
+                    binding.proPhoneLy.error = it.second
+                }
+            })
         }else{
             exit()
         }
@@ -256,7 +281,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun isPhoneChangeRequest() : Boolean{
-        return binding.proPhoneInput.text.toString() != user.phoneNumber
+        return !binding.proPhoneInput.text.isNullOrEmpty() && binding.proPhoneInput.text.toString() != user.phoneNumber
     }
 
     private fun isEmailChangeRequest() : Boolean{

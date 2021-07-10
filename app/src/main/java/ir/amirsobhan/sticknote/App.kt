@@ -14,6 +14,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -54,6 +55,7 @@ class App : Application(), androidx.work.Configuration.Provider{
                     .build() }
 
         }
+
         startKoin {
             androidLogger()
             androidContext(this@App)
@@ -70,6 +72,7 @@ class App : Application(), androidx.work.Configuration.Provider{
         }
 
         // Start and config firebase services
+        Firebase.auth.currentUser?.reload()
         Firebase.analytics
         Firebase.performance
         Firebase.messaging
@@ -86,8 +89,13 @@ class App : Application(), androidx.work.Configuration.Provider{
         Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig.getLong("fetch_interval") })
         Firebase.remoteConfig.fetchAndActivate()
 
-        Firebase.messaging.token.addOnSuccessListener {
-            Log.d("Notification_token",it)
+        if(Firebase.auth.currentUser != null){
+            Firebase.messaging.token.addOnSuccessListener {
+                Firebase.firestore.document("users/${Firebase.auth.currentUser?.uid}")
+                    .set(hashMapOf(
+                        "message_token" to it
+                    ), SetOptions.merge())
+            }
         }
     }
 

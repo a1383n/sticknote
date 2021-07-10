@@ -23,7 +23,8 @@
         android:layout_gravity="bottom"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
-        app:fabAlignmentMode="center">
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigation"

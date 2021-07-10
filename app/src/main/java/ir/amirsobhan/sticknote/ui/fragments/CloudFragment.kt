@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.Operation
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,8 +22,9 @@ import ir.amirsobhan.sticknote.ui.activity.AuthActivity
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
 import ir.amirsobhan.sticknote.worker.AutoSync
 import org.koin.android.ext.android.inject
+import java.util.*
 
-class CloudFragment : Fragment(){
+  class CloudFragment : Fragment(){
     private val TAG = "CloudFragment"
     private var _binding : FragmentCloudBinding? = null
     private val binding get() = _binding!!
@@ -58,7 +62,15 @@ class CloudFragment : Fragment(){
 
             binding.syncButtom.setOnClickListener {
                 binding.syncButtom.isEnabled = false
-                workManager.enqueue(AutoSync.Factory(AutoSync.SYNC))
+                var id : UUID
+                workManager.enqueue(AutoSync.Factory(AutoSync.SYNC).also { id = it.id })
+                workManager.getWorkInfoByIdLiveData(id)
+                    .observe(viewLifecycleOwner, Observer {
+                        if (it.state == WorkInfo.State.SUCCEEDED){
+                            binding.syncButtom.isEnabled = true
+                            binding.lastSync.text = viewModel.getLastSyncDate()
+                        }
+                    })
             }
 
         }else{

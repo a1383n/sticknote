@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
@@ -42,11 +43,14 @@ class SettingFragment : PreferenceFragmentCompat(){
             accountInfo.isSelectable = false
 
             if (!user.isEmailVerified) {
-                val successMessage = Snackbar.make(requireContext(), requireView(), "Verification link send to your email,Check your inbox", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.bottomNavigation)
+                val successMessage = Snackbar.make(requireActivity().findViewById(android.R.id.content), "Verification link send to your email,Check your inbox", Snackbar.LENGTH_LONG)
+                        .setAnchorView(R.id.floatingAction)
                 accountVerify.isVisible = true
                 accountVerify.setOnPreferenceClickListener {
-                    user?.sendEmailVerification().addOnSuccessListener { successMessage.show() }.addOnFailureListener { Toast.makeText(context, it.message, Toast.LENGTH_LONG).show() }
+                    user?.sendEmailVerification().addOnSuccessListener {
+                        successMessage.show()
+                        accountVerify.isVisible = false
+                    }.addOnFailureListener { Toast.makeText(context, it.message, Toast.LENGTH_LONG).show() }
                     true
                 }
             }

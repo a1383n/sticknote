@@ -5,9 +5,11 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.util.Log
 import androidx.work.*
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.database.Note
@@ -22,6 +24,7 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
         const val GET: Int = 2
         const val DELETE: Int = 3
         const val SYNC: Int = 4
+        const val TAG = "sync"
 
         fun Factory(action : Int,id : String = "") : OneTimeWorkRequest{
             return OneTimeWorkRequestBuilder<AutoSync>()
@@ -84,9 +87,9 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
         val time = System.currentTimeMillis()
         Log.d(TAG + "/SET", list.size.toString())
         doc.set(hashMapOf(
-                "last_sync" to time,
+                "last_sync" to Timestamp(Date(time)),
                 "notes" to list
-        )).addOnSuccessListener {
+        ), SetOptions.merge()).addOnSuccessListener {
             sharedPreferences.edit().putLong("last_sync", time).apply()
         }
     }

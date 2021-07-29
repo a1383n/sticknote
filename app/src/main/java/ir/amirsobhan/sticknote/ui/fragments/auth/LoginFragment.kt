@@ -3,72 +3,57 @@ package ir.amirsobhan.sticknote.ui.fragments.auth
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Scope
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseException
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
-import ir.amirsobhan.sticknote.ui.activity.AuthActivity
 import org.koin.android.ext.android.inject
-import java.lang.RuntimeException
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val TAG = "LoginFragment"
-    private lateinit var auth : FirebaseAuth
-    private lateinit var display_name : String
+    private val auth = Firebase.auth
+    private lateinit var displayName : String
 
     val data : Intent = Intent()
 
-    override fun onCreateView(inflater: LayoutInflater,  container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,  container: ViewGroup?,savedInstanceState: Bundle?): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
 
         init()
 
-        binding.loginButton.setOnClickListener {
-            if (formValidation()){
-                auth.signInWithEmailAndPassword(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
-                    .addOnSuccessListener {
-                        activity?.setResult(Activity.RESULT_OK,data)
-                        activity?.finish()
-                    }
-                    .addOnFailureListener {
-                       binding.loginError.apply {
-                           visibility = View.VISIBLE
-                           text = it.message
-                       }
-                    }
-            }
-        }
-        binding.googleSignInBtn.setOnClickListener { googleSignInRequest().also { binding.googleSignInBtn.isEnabled = false } }
-        binding.resetPasswordButton.setOnClickListener { findNavController().navigate(R.id.action_loginFragment_to_restPasswordFragment, bundleOf("email" to binding.inputEmail.text.toString())) }
-
         return binding.root
     }
 
-    fun init() {
-        binding.registerButton.setOnClickListener { findNavController().navigate(R.id.action_loginFragment_to_registerFragment) }
-        auth = Firebase.auth
+    private fun init() {
+        binding.loginButton.setOnClickListener { if (formValidation()){ loginWithEmail() } }
+        binding.googleSignInBtn.setOnClickListener { googleSignInRequest() }
+        binding.resetPasswordButton.setOnClickListener { navigateToResetPassword() }
+        binding.registerButton.setOnClickListener { navigateToRegister() }
     }
 
-    fun formValidation(): Boolean {
+    /**
+     * Validate login form
+     * @return The form is validate or not
+     */
+    private fun formValidation(): Boolean {
         if (binding.inputEmail.text.isNullOrBlank()) {
             binding.emailLayout.error = "Email cannot be empty"
             return false
@@ -88,44 +73,88 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun googleSignInRequest(){
+    /**
+     * Request to login with email and password
+     */
+    private fun loginWithEmail() {
+        auth.signInWithEmailAndPassword(binding.inputEmail.text.toString(),binding.inputPassword.text.toString())
+            .addOnSuccessListener {
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.LOGIN,null)
+                Firebase.analytics.setUserProperty(FirebaseAnalytics.UserProperty.SIGN_UP_METHOD,"email")
+                activity?.setResult(Activity.RESULT_OK,data)
+                activity?.finish()
+            }
+            .addOnFailureListener {
+                binding.loginError.apply {
+                    visibility = View.VISIBLE
+                    text = it.message
+                }
+            }
+    }
+
+    /**
+     * Request to signIn with google
+     */
+    private fun googleSignInRequest() {
         val gso : GoogleSignInOptions by inject()
-
         val googleSignInClient = GoogleSignIn.getClient(requireContext(),gso)
-
+        binding.googleSignInBtn.isEnabled = false
         startActivityForResult(googleSignInClient.signInIntent,15)
     }
 
-    fun firebaseAuthWithGoogle(idToken : String){
+    private fun navigateToResetPassword() {
+        findNavController()
+            .navigate(R.id.action_loginFragment_to_restPasswordFragment, bundleOf("email" to binding.inputEmail.text.toString()))
+    }
+
+    private fun navigateToRegister() {
+        findNavController()
+            .navigate(R.id.action_loginFragment_to_registerFragment)
+    }
+
+    /**
+     * Auth google credential with firebase
+     * @param idToken The id token was google return to app
+     */
+    fun firebaseAuthWithGoogle(idToken : String) {
         val credential = GoogleAuthProvider.getCredential(idToken,null)
         auth.signInWithCredential(credential)
             .addOnSuccessListener {
                 val userProfileChangeRequest = UserProfileChangeRequest.Builder()
-                        .setDisplayName(this.display_name)
+                        .setDisplayName(this.displayName)
                         .build()
 
                 it.user?.updateProfile(userProfileChangeRequest)
 
-
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.LOGIN,null)
+                Firebase.analytics.setUserProperty(FirebaseAnalytics.UserProperty.SIGN_UP_METHOD,"google")
                 data.putExtra("name",it.user?.displayName)
                 activity?.setResult(Activity.RESULT_OK,data)
                 activity?.finish()
             }
             .addOnFailureListener {
-                Log.d(TAG, "firebaseAuthWithGoogle: ${it.message}")
+                if (it !is FirebaseException) {
+                    Snackbar.make(requireView(), it.toString(), Snackbar.LENGTH_SHORT).show()
+                }else{
+                    Snackbar.make(requireView(),getString(R.string.error_occurred,getString(R.string.error_403_google)),Snackbar.LENGTH_SHORT).show()
+                }
             }
     }
 
+    /**
+     * Handel google signIn action result
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 15){
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)!!
-                display_name = account.displayName!!
+                displayName = account.displayName!!
                 firebaseAuthWithGoogle(account.idToken!!)
             }catch (e : ApiException){
-                Log.e(TAG,e.message,e)
+                Firebase.crashlytics.recordException(e)
+                Snackbar.make(requireView(),getString(R.string.error_occurred_during,"the google signIn.code ${e.message}"),Snackbar.LENGTH_SHORT).show()
             }
         }
     }

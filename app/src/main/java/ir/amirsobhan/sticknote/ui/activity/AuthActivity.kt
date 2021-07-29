@@ -1,7 +1,7 @@
 package ir.amirsobhan.sticknote.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -14,18 +14,17 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        // TODO: Improve auth ui & handle FirebaseException
-
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Find NavHostFragment
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
 
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments -> binding.textView3.text = destination.label }
+        // Add listener to change activity toolbar title when navigation changed
+        navController.addOnDestinationChangedListener { _, destination, _ -> binding.textView3.text = destination.label }
 
         setSupportActionBar(binding.materialToolbar)
         setupActionBarWithNavController(navController)

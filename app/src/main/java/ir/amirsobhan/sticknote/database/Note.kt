@@ -1,26 +1,31 @@
 package ir.amirsobhan.sticknote.database
-
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.common.hash.HashCode
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import io.grpc.KnownLength
-import ir.amirsobhan.sticknote.diskIO
-import java.lang.reflect.Type
+import com.google.firebase.Timestamp
 import java.util.*
-import kotlin.collections.HashMap
 
 @Entity
 data class Note(
         @PrimaryKey val id: String = generateRandomId(),
         var title: String,
         var text: String?,
-        var timestamp: Long = System.currentTimeMillis()
+        var timestamp: Timestamp = Timestamp.now()
+
 ){
     companion object{
+
+        /**
+         * Create Note object from firestore
+         * @param hashMap The hashmap of firestore
+         * @return Note object
+         */
         fun fromHashMap(hashMap: HashMap<String,Objects>) : Note{
-            return Note(hashMap["id"].toString(),hashMap["title"].toString(),hashMap["text"].toString(),hashMap["timestamp"].toString().toLong())
+            return Note(
+                hashMap["id"].toString(),
+                hashMap["title"].toString(),
+                hashMap["text"].toString(),
+                hashMap["timestamp"] as Timestamp
+            )
         }
     }
 
@@ -45,6 +50,10 @@ data class Note(
 
 }
 
+/**
+ * Generate random string
+ * @param length The string length for generate
+ */
 fun grs(length: Int) : String{
     val allowedChars = ('a'..'z') + ('0'..'9')
     return (1..length)
@@ -52,6 +61,10 @@ fun grs(length: Int) : String{
             .joinToString("")
 }
 
+/**
+ * Generate random id for store note in database
+ * @return The string id for note. Ex:ABCD1234-EF56-HI78-GK90-LMNOPQ123456
+ */
 fun generateRandomId() : String{
     return grs(8) + "-" + grs(4) + "-" + grs(4) + "-" + grs(4)  + "-" + grs(12)
 }

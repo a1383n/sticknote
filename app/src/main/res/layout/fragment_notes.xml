@@ -35,8 +35,8 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
                         android:layout_marginTop="72dp"
                         android:layout_marginEnd="16dp"
                         android:src="@drawable/group"
@@ -52,17 +52,12 @@
                     android:background="@drawable/shape_bg"
                     app:layout_collapseMode="pin"
                     app:title="My Notes"
-                    android:layout_marginLeft="15dp"
+                    app:titleMarginStart="25dp"
                     app:titleTextColor="@color/white" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -70,9 +65,8 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                 app:spanCount="2"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/row_note" />
-
-        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

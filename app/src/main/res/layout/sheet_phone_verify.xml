@@ -20,71 +20,80 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:visibility="gone">
 
-    <TextView
-        android:id="@+id/phone_verify_des"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:text="@string/phone_verification_des"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/verify_code_ly"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:hint="Verification code"
-        app:counterEnabled="true"
-        app:counterMaxLength="6"
-        app:errorEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/phone_verify_des"
-        app:startIconContentDescription="Text Message"
-        tools:layout_editor_absoluteX="15dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/verify_code_inp"
+        <TextView
+            android:id="@+id/phone_verify_des"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:maxLength="6"
-            android:minLines="1" />
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/phone_verification_des"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/verify_code_ly"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Verification code"
+            app:counterEnabled="true"
+            app:counterMaxLength="6"
+            app:layout_constraintTop_toBottomOf="@+id/phone_verify_des"
+            app:startIconContentDescription="Text Message"
+            tools:layout_editor_absoluteX="15dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Time left to resend the verification code:"
-        app:layout_constraintStart_toStartOf="@+id/verify_code_ly"
-        app:layout_constraintTop_toBottomOf="@+id/verify_code_ly" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/verify_code_inp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLength="6"
+                android:minLines="1" />
 
-    <TextView
-        android:id="@+id/countdown_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/resend_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Resend code"
-        app:layout_constraintStart_toStartOf="@+id/verify_code_ly"
-        app:layout_constraintTop_toBottomOf="@+id/verify_code_ly"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="17dp"
+            android:text="Time left to resend the verification code:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/verify_code_ly"
+            app:layout_constraintTop_toBottomOf="@+id/verify_code_ly" />
+
+        <TextView
+            android:id="@+id/countdown_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+        <Button
+            android:id="@+id/resendButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Resend code"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/verify_code_ly"
+            app:layout_constraintStart_toStartOf="@+id/verify_code_ly"
+            app:layout_constraintTop_toBottomOf="@+id/verify_code_ly"
+            android:visibility="gone" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

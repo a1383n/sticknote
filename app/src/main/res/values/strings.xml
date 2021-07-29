@@ -1,20 +1,85 @@
 <resources>
-    <string name="app_name">StickMe Note</string>
-    <string name="reset_password_email_sent">Password reset link successfully sent to your email</string>
+    <string name="app_name" translatable="false">StickMe Note</string>
+    <string name="app_description">%1$s is a simple notepad.\nThis app is a easy and fast notes app.</string>
+    <string name="note_adapter_long_body">%1$s …</string>
 
+    <string name="download_controller_notification_title">Downloading …</string>
+    <string name="download_controller_notification_des">New version of app is downloading</string>
 
-    <string name="nav_host">androidx.navigation.fragment.NavHostFragment</string>
-    <string name="lorm">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap oooooooooooooooo into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </string>
-    <string name="untitled">Untitled</string>
+    <string name="profile_fragment_label" translatable="false">ProfileFragment</string>
+N    <string name="note_activity_untitled">Untitled</string>
+    <string name="note_activity_note_saved">Your note saved successfully</string>
+    <string name="note_activity_delete_note_message">Are you sure you want to delete this note?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
+    <string name="cancel">Cancel</string>
+    <string name="note_activity_note_overwrite">Are you sure you want to save the new note?</string>
+    <string name="splash_activity_html_text"><![CDATA[
+        <font color=%1$s>StickMe</font>  <font color=#FA8704>Note</font>
+    ]]></string>
+    <string name="splash_activity_update_available_title">Update Available</string>
+    <string name="splash_activity_update_available_message">A new version of this app is available</string>
+    <string name="update_now">Update now</string>
+    <string name="later">Later</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="permission_denied_message">Without this permission the app is unable to download new and install new version.Are you sure you want to deny this permission?</string>
+    <string name="im_sure">I\'m sure</string>
+    <string name="retry">Retry</string>
+    <string name="permission_dialog_block">We cannot show your runtime permission dialog box. Please pass this permission to us from the Setting->Apps->StickMe Note->Permissions->Files and media->Allow access</string>
+    <string name="ok">OK</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="error_occurred_during">An error occurred during %1$s</string>
+    <string name="error_403_google">Your client does not have permission to access the google services</string>
 
-    <string name="phone_verification_des">A text message with a verification code has now been sent to your phone number</string>
+    <string name="password_empty">Password cannot be empty</string>
+    <string name="empty_input">%1$s cannot be empty</string>
+    <string name="valid_input">Enter a valid %1$s</string>
+    <string name="password_length">Password length should 8 or above</string>
+    <string name="password_con_match">Password confirmation doesn\'t match password</string>
     <string name="email_change_pass_verify">Enter your password to send verification link to new email:</string>
     <string name="email_change_google_verify">SignIn again to send verification link to new email:</string>
     <string name="email_change_link_send">A verification link send has now been sent to your new email</string>
+    <string name="reset_password_email_sent">Password reset link successfully sent to your email</string>
 
-    <string name="permission_denied">Permission Denied</string>
-    <string name="permission_denied_message">Without this permission the app is unable to download new and install new version.Are you sure you want to deny this permission?</string>
-    <string name="permission_dialog_block">We cannot show your runtime permission dialog box. Please pass this permission to us from the Setting->Apps->StickMe Note->Permissions->Files and media->Allow access</string>
+    <!-- Setting preferences keys -->
+    <string name="setting_general_theme">general_theme</string>
+    <string name="setting_acc_info">account_info</string>
+    <string name="setting_acc_edit">account_edit</string>
+    <string name="setting_acc_verify">account_verify</string>
+    <string name="setting_acc_logout">account_logout</string>
+    <string name="setting_login_as">Your login as %1$s</string>
+    <string name="setting_verification_send">Verification link send to your email,Check your inbox!</string>
+    <string name="logout">Logout</string>
+    <string name="setting_logout_msg">Are you sure you want to logout?\n<b>Cloud saving will stop after logout</b></string>
+    <string name="setting_not_login">You\'re not login</string>
+    <string name="setting_click_login">Click to login</string>
+    <string name="warning">Warning</string>
+    <string name="setting_last_sync_error">We couldn\'t do the last cloud sync\n<b>Are you sure you want to log out without sync?</b></string>
+
+    <string name="welcome_signin">Welcome, Sync in progress …</string>
+    <string name="last_sync">Last sync: %1$s</string>
+    <string name="app_version">Version: %1$s %2$s</string>
+    <string name="item_selected">%1$d selected</string>
+    <string name="deleteMultiNote_message">Are you sure you want to delete %1$s notes?</string>
+    <string name="phone_verification_des">A text message with a verification code has now been sent to your phone number</string>
+    <string name="send_notes_to">Send notes to:</string>
+
+    <string name="nav_host" translatable="false">androidx.navigation.fragment.NavHostFragment</string>
+    <string name="sync_now">Sync Now</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="i_don_t_have_an_account">I Don\'t have an account</string>
+
+    <string-array name="heading_list">
+        <item>Heading 1</item>
+        <item>Heading 2</item>
+        <item>Heading 3</item>
+        <item>Heading 4</item>
+        <item>Heading 5</item>
+        <item>Heading 6</item>
+    </string-array>
 </resources>

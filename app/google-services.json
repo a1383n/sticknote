@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "407197468075-gt8mt13ev3o15ch6gc0hhihn6u0kcahb.apps.googleusercontent.com",
+          "client_id": "407197468075-c9c362tqrtog898rueq0ed5ria5pqi5k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ir.amirsobhan.sticknote",
-            "certificate_hash": "b26811316181e8da6dc2af2905f05461c3cb5854"
+            "certificate_hash": "70edc160ac312e7d1559994f9d0fb56c1f4adb64"
+          }
+        },
+        {
+          "client_id": "407197468075-lrgk3ep1u5jgpoca52sjvihrqnpjru8g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ir.amirsobhan.sticknote",
+            "certificate_hash": "7969ae63272ab8b0b1cfbeec0aa5ae41c8e94edd"
           }
         },
         {

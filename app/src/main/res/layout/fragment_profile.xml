@@ -99,7 +99,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:hint="Email"
+            android:hint="@string/email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pro_name_ly">
@@ -111,7 +111,7 @@
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.tfcporciuncula.phonemoji.PhonemojiTextInputLayout
             android:id="@+id/pro_phone_ly"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -119,18 +119,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:hint="Phone number"
-            app:helperText="E.g. +1000000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pro_email_ly">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <com.tfcporciuncula.phonemoji.PhonemojiTextInputEditText
                 android:id="@+id/pro_phone_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="phone"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:inputType="phone" />
+
+        </com.tfcporciuncula.phonemoji.PhonemojiTextInputLayout>
 
         <View
             android:id="@+id/pro_hr"

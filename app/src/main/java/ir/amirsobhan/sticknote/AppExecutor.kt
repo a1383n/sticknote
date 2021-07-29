@@ -14,6 +14,3 @@ fun mainThread(context: Context): Executor {
     return ContextCompat.getMainExecutor(context)
 }
 
-fun networkIO(): ExecutorService {
-    return Executors.newScheduledThreadPool(3)
-}

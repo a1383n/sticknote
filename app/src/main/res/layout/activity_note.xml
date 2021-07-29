@@ -8,6 +8,7 @@
     tools:context=".ui.activity.NoteActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@drawable/shape_bg"
@@ -30,17 +31,17 @@
                 android:id="@+id/toolbarEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
                 android:layout_marginLeft="25dp"
+                android:layout_marginTop="70dp"
                 android:layout_marginRight="25dp"
+                android:background="@android:color/transparent"
                 android:fontFamily="@font/montserrat"
-                android:hint="Untitled"
+                android:hint="@string/note_activity_untitled"
                 android:inputType="textShortMessage"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="28sp"
-                android:textStyle="bold"
-                android:background="@android:color/transparent"/>
+                android:textStyle="bold" />
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -58,25 +59,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.core.widget.NestedScrollView
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
-        <EditText
-            android:id="@+id/body"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
-            android:gravity="start"
-            android:inputType="textMultiLine"
-            android:lines="25"
-            android:minLines="25"
-            android:linksClickable="true"
-            android:autoLink="all" />
-
-    </androidx.core.widget.NestedScrollView>
+    <ir.amirsobhan.sticknote.ui.views.TextStyleBar
+        android:id="@+id/textStyleBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

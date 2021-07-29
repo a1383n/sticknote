@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
@@ -34,6 +36,7 @@ class RegisterFragment : Fragment() {
 
                 auth.createUserWithEmailAndPassword(binding.inputEmail.text.toString(),binding.passwordInput.text.toString())
                         .addOnSuccessListener {
+                            Firebase.analytics.setUserProperty(FirebaseAnalytics.UserProperty.SIGN_UP_METHOD,"email")
                             it.user?.updateProfile(userProfile)
                             activity?.setResult(Activity.RESULT_OK)
                             activity?.finish()

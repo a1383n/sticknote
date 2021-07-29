@@ -2,18 +2,19 @@ package ir.amirsobhan.sticknote
 
 import android.app.Application
 import android.content.Context
-import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,7 +22,6 @@ import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.perf.ktx.performance
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.google.firebase.storage.ktx.storage
 import ir.amirsobhan.sticknote.database.AppDatabase
 import ir.amirsobhan.sticknote.repositories.NoteRepository
 import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
@@ -37,11 +37,11 @@ class App : Application(), androidx.work.Configuration.Provider{
         super.onCreate()
         val sharedPreference = PreferenceManager.getDefaultSharedPreferences(this)
         //Set App theme mode
-        AppCompatDelegate.setDefaultNightMode(sharedPreference.getString("theme","-1")!!.toInt())
+        AppCompatDelegate.setDefaultNightMode(sharedPreference.getString(getString(R.string.setting_general_theme),"-1")!!.toInt())
 
         val viewModelModules = module {
             viewModel { NoteViewModel(get()) }
-            viewModel { CloudViewModel(this@App) }
+            viewModel { CloudViewModel() }
         }
         val appModules = module {
             single { AppDatabase(this@App) }
@@ -49,10 +49,11 @@ class App : Application(), androidx.work.Configuration.Provider{
             single { NoteRepository(get<AppDatabase>().noteDao()) }
             single { WorkManager.getInstance(this@App) }
             single { GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("407197468075-hvl6n5tldj9pngajraeevhkegt4ndu9q.apps.googleusercontent.com")
+                    .requestIdToken(Constants.GOOGLE_ID_TOKEN)
                     .requestScopes(Scope("profile"))
                     .requestEmail()
-                    .build() }
+                    .build()
+            }
 
         }
 
@@ -62,16 +63,11 @@ class App : Application(), androidx.work.Configuration.Provider{
             modules(viewModelModules,appModules)
         }
 
-        //Setup firebase emulator
-        //TODO: Remove for production
-        if (BuildConfig.DEBUG && isEmulator()) {
-            Firebase.auth.useEmulator("10.0.2.2", 9099)
-            Firebase.firestore.useEmulator("10.0.2.2", 8080)
-            Firebase.storage.useEmulator("10.0.2.2",9199)
-            Firebase.firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().apply { isPersistenceEnabled = false }.build()
-        }
-
         // Start and config firebase services
+        FirebaseApp.initializeApp(this)
+        val appCheck = FirebaseAppCheck.getInstance()
+        appCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
+
         Firebase.auth.currentUser?.reload()
         Firebase.analytics
         Firebase.performance
@@ -80,42 +76,26 @@ class App : Application(), androidx.work.Configuration.Provider{
         Firebase.auth.currentUser?.uid?.let {
             Firebase.crashlytics.setUserId(it)
             Firebase.analytics.setUserId(it)
+            Firebase.auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
         }
 
         Firebase.remoteConfig.setDefaultsAsync(mapOf(
-            "app_version" to BuildConfig.VERSION_NAME.toDouble(),
-            "fetch_interval" to if (BuildConfig.DEBUG) 0 else 3600
+            Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_NAME.toDouble(),
+            Constants.RemoteConfig.FETCH_INTERVAL to if (BuildConfig.DEBUG) 0 else 3600
         ))
         Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig.getLong("fetch_interval") })
         Firebase.remoteConfig.fetchAndActivate()
 
         if(Firebase.auth.currentUser != null){
             Firebase.messaging.token.addOnSuccessListener {
-                Firebase.firestore.document("users/${Firebase.auth.currentUser?.uid}")
+                Firebase.firestore.document(Constants.CloudDatabase.getDocumentPath(Firebase.auth.uid))
                     .set(hashMapOf(
-                        "message_token" to it
+                        Constants.CloudDatabase.MESSAGE_TOKEN to listOf(it)
                     ), SetOptions.merge())
             }
         }
-    }
 
-    private fun isEmulator(): Boolean {
-        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("unknown")
-                || Build.HARDWARE.contains("goldfish")
-                || Build.HARDWARE.contains("ranchu")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                || Build.MANUFACTURER.contains("Genymotion")
-                || Build.PRODUCT.contains("sdk_google")
-                || Build.PRODUCT.contains("google_sdk")
-                || Build.PRODUCT.contains("sdk")
-                || Build.PRODUCT.contains("sdk_x86")
-                || Build.PRODUCT.contains("vbox86p")
-                || Build.PRODUCT.contains("emulator")
-                || Build.PRODUCT.contains("simulator"))
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN,null)
     }
 
     override fun attachBaseContext(base: Context?) {

@@ -9,6 +9,12 @@
         android:title="Delete" />
 
     <item
+        android:id="@+id/share"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="Share"/>
+
+    <item
         android:id="@+id/save"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_check_24"

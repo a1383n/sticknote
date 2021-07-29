@@ -4,15 +4,18 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import ir.amirsobhan.sticknote.helper.Converters
 
 @Database(entities = [Note::class], version = 2)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
-        private val LOCK = Any();
+        private val LOCK = Any()
 
         operator fun invoke(application: Application) = instance ?: synchronized(LOCK) {
             instance ?: buildDatabase(application).also { instance = it }

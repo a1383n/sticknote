@@ -6,21 +6,21 @@
     <PreferenceCategory
         android:title="Account">
         <Preference
-            android:key="account_info"
+            android:key="@string/setting_acc_info"
             android:icon="@drawable/ic_baseline_person_24">
         </Preference>
         <Preference
-            android:key="account_edit"
+            android:key="@string/setting_acc_edit"
             android:title="Edit account information"
             android:icon="@drawable/account_edit"/>
         <Preference
-            android:key="account_verify"
+            android:key="@string/setting_acc_verify"
             android:title="Verify email"
             android:icon="@drawable/email_check"
             android:summary="Your email is not verified\nTap to send verify link"
             app:isPreferenceVisible="false"/>
         <Preference
-            android:key="account_logout"
+            android:key="@string/setting_acc_logout"
             android:title="Logout"
             android:icon="@drawable/logout"/>
 
@@ -29,7 +29,7 @@
     <PreferenceCategory
         android:title="General">
         <ListPreference
-            android:key="theme"
+            android:key="@string/setting_general_theme"
             android:title="Theme"
             android:summary="%s"
             android:icon="@drawable/ic_baseline_color_lens_24"

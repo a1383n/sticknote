@@ -1,63 +1,61 @@
 package ir.amirsobhan.sticknote.ui.activity
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
-import android.text.method.LinkMovementMethod
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
+import com.google.firebase.Timestamp
+import ir.amirsobhan.sticknote.Constants
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.ActivityNoteBinding
 import ir.amirsobhan.sticknote.helper.KeyboardManager
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.getViewModel
 
-class NoteActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity() ,View.OnClickListener {
     private lateinit var binding: ActivityNoteBinding
-    val noteViewModel : NoteViewModel by inject()
+    private val noteViewModel : NoteViewModel by inject()
     private lateinit var keyboardManager: KeyboardManager
     private lateinit var note: Note
-    var fromIntent = false
+    private var fromIntent = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         keyboardManager = KeyboardManager(this)
 
-        loadFromIntent()
+        handleIntent()
         setupAppBar()
         setEditText()
-
-        //Set Link Clickable
-        binding.body.movementMethod = LinkMovementMethod.getInstance()
-
     }
 
-    private fun loadFromIntent() {
-        val json = intent.getStringExtra("json")
-        if (json != null) {
-            fromIntent = true
-            note = Gson().fromJson(json, Note::class.java)
-
-            binding.toolbarEditText.setText(note.title)
-            binding.body.setText(note.text)
-            binding.collapsingToolbarLayout.title = note.title
-        }else{
-            note = Note(title = "",text = "")
+    private fun handleIntent() {
+        // Check activity start from app or not
+        if (intent.action == Intent.ACTION_SEND){
+            // Activity start from share option and had extra text
+            note = Note(text = intent.extras?.get(Intent.EXTRA_TEXT).toString(),title = "")
+        }else {
+            val id = intent.getStringExtra(Constants.NOTE_ACTIVITY_EXTRA_INPUT)
+            // Activity start from app and had extra input
+            note = if (id != null) {
+                noteViewModel.getNoteByID(id).also { fromIntent = true }
+            } else {
+                // Empty note
+                Note(title = "", text = "")
+            }
         }
     }
 
     private fun setupAppBar() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-        if (binding.toolbarEditText.hint == getString(R.string.untitled) && TextUtils.isEmpty(
-                binding.toolbarEditText.text.toString()
-            )
-        ) binding.collapsingToolbarLayout.title =
-            getString(R.string.untitled)
+        if (binding.toolbarEditText.hint == getString(R.string.note_activity_untitled) && binding.toolbarEditText.text.isEmpty()
+        ) binding.collapsingToolbarLayout.title = getString(R.string.note_activity_untitled)
         else binding.collapsingToolbarLayout.title = binding.toolbarEditText.text.toString()
 
 
@@ -70,76 +68,79 @@ class NoteActivity : AppCompatActivity() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save -> onBackPressed()
-                R.id.delete -> deleteDB()
+                R.id.delete -> deleteNote()
+                R.id.share -> updateNote().also { noteViewModel.shareMultiNote(this, listOf(note)) }
             }
 
             true
         }
-    }
 
-    private fun setEditText() {
-        binding.toolbarEditText.requestFocus()
-        keyboardManager.showKeyboard(binding.toolbarEditText)
-
-        binding.body.setOnClickListener {
-            if (binding.toolbarEditText.isFocused) {
-                binding.toolbarEditText.clearFocus()
-                keyboardManager.closeKeyboard(binding.toolbarEditText)
-                binding.collapsingToolbarLayout.title = binding.toolbarEditText.text.toString()
+        binding.body.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY > 200){
+                binding.appBarLayout.setExpanded(false,true)
+            }else{
+                binding.appBarLayout.setExpanded(true,true)
             }
         }
     }
 
-    private fun insertToDB() {
-        noteViewModel.insert(
-            Note(
-                title = binding.toolbarEditText.text.toString(),
-                text = binding.body.text.toString(),
-            )
-        )
+    private fun setEditText() {
+        binding.textStyleBar.setEditor(binding.body)
+        binding.body.isVerticalScrollBarEnabled = true
+        binding.body.html = note.text
 
-        Toast.makeText(this, "Your note saved successfully", Toast.LENGTH_LONG).show()
-
+        binding.body.setEditorBackgroundColor(Color.TRANSPARENT)
+        if (Constants.isDarkMode(this)){
+            binding.body.setEditorFontColor(Color.WHITE)
+        }
     }
 
-    private fun updateDB() {
-        noteViewModel.update(note!!.apply {
-            text = binding.body.text.toString()
+    private fun insert() {
+        noteViewModel.insert(Note(title = binding.toolbarEditText.text.toString(), text = binding.body.html))
+        Toast.makeText(this, R.string.note_activity_note_saved, Toast.LENGTH_LONG).show()
+    }
+
+    private fun updateNote() {
+        noteViewModel.update(note.apply {
+            text = binding.body.html
             title = binding.toolbarEditText.text.toString()
-            timestamp = System.currentTimeMillis()
+            timestamp = Timestamp.now()
         })
     }
 
-    private fun deleteDB(){
+    private fun deleteNote(){
         MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-            .setTitle("Are you sure you want to delete this note ?")
-            .setPositiveButton("Yes") {dialog,witch -> noteViewModel.delete(note).also { finish() }}
-            .setNegativeButton("No",null)
+            .setTitle(R.string.note_activity_delete_note_message)
+            .setPositiveButton(R.string.yes) { _, _ -> noteViewModel.delete(note).also { finish() }}
+            .setNegativeButton(R.string.no,null)
             .show()
     }
 
     override fun onBackPressed() {
-        keyboardManager.closeKeyboard(binding.body)
-        keyboardManager.closeKeyboard(binding.toolbarEditText)
+        keyboardManager.closeKeyboard(binding.root)
         if (fromIntent) {
             //Is note changed ?
-            if (binding.toolbarEditText.text.toString() != note?.title || binding.body.text.toString() != note?.text) {
+            if (binding.toolbarEditText.text.toString() != note.title || binding.body.html != note.text) {
                 // Yes , Show dialog to the user to confirm this change
                     MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                        .setTitle("Save this note ?")
-                        .setMessage("Are you sure you want to save the new note?")
-                        .setPositiveButton("Save") { dialogInterface: DialogInterface, i: Int -> updateDB().also { super.onBackPressed() }}
-                        .setNegativeButton("Discard") { dialogInterface: DialogInterface, i: Int -> finish() }
-                        .setNeutralButton("Cancel", null)
+                        .setMessage(R.string.note_activity_note_overwrite)
+                        .setPositiveButton(R.string.save) { _: DialogInterface, _: Int -> updateNote().also { super.onBackPressed() }}
+                        .setNegativeButton(R.string.discard) { _: DialogInterface, _: Int -> finish() }
+                        .setNeutralButton(R.string.cancel, null)
                         .show()
             }else{
                 super.onBackPressed()
             }
-        } else if (!TextUtils.isEmpty(binding.body.text.toString()) || !TextUtils.isEmpty(binding.toolbarEditText.text.toString())) {
-            insertToDB()
+        } else if (!binding.body.html.isNullOrEmpty() || binding.toolbarEditText.text.isNotEmpty()) {
+            insert()
             super.onBackPressed()
         }else{
             super.onBackPressed()
         }
     }
+
+    override fun onClick(v: View?) {
+        Toast.makeText(this, v?.id.toString(), Toast.LENGTH_SHORT).show()
+    }
+
 }

@@ -3,6 +3,7 @@ package ir.amirsobhan.sticknote.ui.activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -75,16 +76,19 @@ class NoteActivity : AppCompatActivity() ,View.OnClickListener {
             true
         }
 
-        binding.body.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            if (scrollY > 200){
-                binding.appBarLayout.setExpanded(false,true)
-            }else{
-                binding.appBarLayout.setExpanded(true,true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.body.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                if (scrollY > 200){
+                    binding.appBarLayout.setExpanded(false,true)
+                }else{
+                    binding.appBarLayout.setExpanded(true,true)
+                }
             }
         }
     }
 
     private fun setEditText() {
+        binding.toolbarEditText.setText(note.title)
         binding.textStyleBar.setEditor(binding.body)
         binding.body.isVerticalScrollBarEnabled = true
         binding.body.html = note.text

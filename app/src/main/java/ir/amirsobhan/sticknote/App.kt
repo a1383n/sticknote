@@ -2,6 +2,7 @@ package ir.amirsobhan.sticknote
 
 import android.app.Application
 import android.content.Context
+import android.os.Handler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.perf.ktx.performance
+import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import ir.amirsobhan.sticknote.database.AppDatabase
@@ -68,6 +70,16 @@ class App : Application(), androidx.work.Configuration.Provider{
         val appCheck = FirebaseAppCheck.getInstance()
         appCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
+        Firebase.remoteConfig.setDefaultsAsync(mapOf(
+            Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_NAME.toDouble(),
+            Constants.RemoteConfig.FETCH_INTERVAL to if (BuildConfig.DEBUG) 0 else 3600
+        ))
+
+        Handler(mainLooper).post { initFirebase() }
+
+    }
+
+    private fun initFirebase(){
         Firebase.auth.currentUser?.reload()
         Firebase.analytics
         Firebase.performance
@@ -79,11 +91,7 @@ class App : Application(), androidx.work.Configuration.Provider{
             Firebase.auth.firebaseAuthSettings.setAppVerificationDisabledForTesting(true)
         }
 
-        Firebase.remoteConfig.setDefaultsAsync(mapOf(
-            Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_NAME.toDouble(),
-            Constants.RemoteConfig.FETCH_INTERVAL to if (BuildConfig.DEBUG) 0 else 3600
-        ))
-        Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig.getLong("fetch_interval") })
+        Firebase.remoteConfig.setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = Firebase.remoteConfig[Constants.RemoteConfig.FETCH_INTERVAL].asLong() })
         Firebase.remoteConfig.fetchAndActivate()
 
         if(Firebase.auth.currentUser != null){

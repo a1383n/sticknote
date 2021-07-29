@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -27,12 +29,13 @@ import java.util.*
 class NoteAdapter(val context: Context?, private val selectedItems : MutableLiveData<MutableList<Note>>) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
     private var noteList: MutableList<Note> = mutableListOf()
     private var viewsList : MutableList<NoteViewHolder> = mutableListOf()
-
+    private lateinit var isProgress : MutableLiveData<Boolean>
 
     class NoteViewHolder(val binding: RowNoteBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(note: Note, onClick: () -> Unit, onLongClick : ()-> Unit) {
+            binding.root.isVisible = false
             binding.title.text = note.title
             binding.time.text = parseDate(note.timestamp.toDate())
 
@@ -46,6 +49,7 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
                 onLongClick()
                 true
             }
+
             binding.body.setOnTouchListener { v, event ->
                 if (event.action === MotionEvent.ACTION_MOVE) {
                      false
@@ -128,6 +132,16 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
         //Collect all views in adapter
         viewsList.add(holderNote)
 
+        if (noteList.size - 1 == position){
+            holderNote.binding.body.webViewClient = object : WebViewClient(){
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    viewsList.forEach { it.binding.root.isVisible = true }
+                    isProgress.postValue(false)
+                }
+            }
+        }
+
 
         /*
             When user clicked on the note check if we had active selected items this note was selected too
@@ -148,7 +162,8 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
      * Set list and notify adapter the data has been changed
      * @param list The list of you want to set in the adapter
      */
-    fun setList(list : List<Note>){
+    fun setList(list : List<Note>,isProgress: MutableLiveData<Boolean>){
+        this.isProgress = isProgress
         noteList = list.toMutableList()
         notifyDataSetChanged()
     }

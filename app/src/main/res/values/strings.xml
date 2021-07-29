@@ -73,6 +73,7 @@ N    <string name="note_activity_untitled">Untitled</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="i_don_t_have_an_account">I Don\'t have an account</string>
+    <string name="note_fragment_empty_msg">You have no notes!\nTo create a new note, click on the plus icon at the bottom of the app\n⬇️</string>
 
     <string-array name="heading_list">
         <item>Heading 1</item>

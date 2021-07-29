@@ -20,7 +20,7 @@ class InfoFragment : Fragment() {
                 .enableDarkMode(Constants.isDarkMode(requireContext()))
                 .setImage(R.drawable.logo)
                 .setDescription(getString(R.string.app_description,getString(R.string.app_name)))
-                .addGitHub("a1383n/sticknote")
+                .addGitHub("a1383n")
                 .addInstagram("amirsobhan1553","Follow me on Instagram")
                 .addEmail("amirsobhan1553@gmail.com")
                 .addGroup("")

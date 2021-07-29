@@ -18,6 +18,7 @@ import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.storage.ktx.storage
 import ir.amirsobhan.sticknote.BuildConfig
+import ir.amirsobhan.sticknote.Constants
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.SplashActivityBinding
 import ir.amirsobhan.sticknote.helper.DownloadController
@@ -51,8 +52,9 @@ class SplashActivity : AppCompatActivity() {
             splashActivityBinding.appName.text = Html.fromHtml(string)
         }
 
+
         //Check for update
-        if (remoteConfig["app_version"].asDouble() != BuildConfig.VERSION_NAME.toDouble()) {
+        if (remoteConfig[Constants.RemoteConfig.APP_VERSION].asDouble() < BuildConfig.VERSION_NAME.toDouble()) {
             MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
                 .setTitle(R.string.splash_activity_update_available_title)
                 .setMessage(R.string.splash_activity_update_available_message)

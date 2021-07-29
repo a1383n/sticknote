@@ -68,6 +68,27 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:listitem="@layout/row_note" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/empty_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:visibility="gone"
+            android:text="@string/note_fragment_empty_msg"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

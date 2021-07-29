@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.adapters.NoteAdapter
 import ir.amirsobhan.sticknote.databinding.FragmentNotesBinding
@@ -15,6 +17,7 @@ class NotesFragment : Fragment() {
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
     private val viewModel : NoteViewModel by inject()
+    private val isProgress = MutableLiveData(true)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View {
         _binding = FragmentNotesBinding.inflate(layoutInflater,container,false)
@@ -24,7 +27,13 @@ class NotesFragment : Fragment() {
 
         //Observe notes in local database
         viewModel.notes.observe(viewLifecycleOwner, {
-            viewModel.adapter?.setList(it)
+            viewModel.adapter?.setList(it,isProgress)
+            if (it.isEmpty()){
+                binding.emptyMessage.isVisible = true
+                isProgress.postValue(false)
+            }else{
+                binding.emptyMessage.isVisible = false
+            }
         })
 
         //Observe for select note to change toolbar
@@ -43,6 +52,10 @@ class NotesFragment : Fragment() {
             }
         })
 
+
+        isProgress.observe(viewLifecycleOwner,{
+            binding.progressBar.isVisible = it
+        })
 
         return binding.root
     }

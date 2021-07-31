@@ -14,7 +14,7 @@ interface NoteDao {
     /**
      * Get all notes as LiveDate<List<Note>> order by descending
      */
-    @Query("SELECT * FROM Note ORDER BY id DESC")
+    @Query("SELECT * FROM Note ORDER BY timestamp DESC")
     fun getAll(): LiveData<List<Note>>
 
     /**

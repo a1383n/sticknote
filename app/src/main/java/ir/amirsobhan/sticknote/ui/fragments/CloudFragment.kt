@@ -23,7 +23,7 @@ import org.koin.android.ext.android.inject
     private val binding get() = _binding!!
     private val viewModel : CloudViewModel by inject()
     private val auth : FirebaseAuth = Firebase.auth
-    private val isUserSignedIn get() = auth.currentUser != null
+    val isUserSignedIn get() = auth.currentUser != null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View {
         _binding = FragmentCloudBinding.inflate(layoutInflater, container, false)
 

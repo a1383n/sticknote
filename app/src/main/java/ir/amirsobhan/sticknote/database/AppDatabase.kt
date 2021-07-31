@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import ir.amirsobhan.sticknote.Constants
 import ir.amirsobhan.sticknote.helper.Converters
 
 @Database(entities = [Note::class], version = 2)
@@ -23,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private fun buildDatabase(application: Application) = Room.databaseBuilder(
             application,
-            AppDatabase::class.java, "app-database")
+            AppDatabase::class.java, Constants.APP_DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .build()
     }

@@ -16,7 +16,7 @@ import org.koin.android.ext.android.inject
 class NotesFragment : Fragment() {
     private var _binding: FragmentNotesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : NoteViewModel by inject()
+    val viewModel : NoteViewModel by inject()
     private val isProgress = MutableLiveData(true)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View {

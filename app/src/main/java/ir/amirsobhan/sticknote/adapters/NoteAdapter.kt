@@ -39,7 +39,8 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
             binding.title.text = note.title
             binding.time.text = parseDate(note.timestamp.toDate())
 
-            val html = "<font color='white'>" + note.text + "</font>"
+            val html = "<font color='${if (Constants.isDarkMode(context)) "white" else "black"}'>" + note.text + "</font>"
+            var isLongClick = false
 
             binding.body.loadData(html,"text/html", "UTF-8")
             binding.body.setBackgroundColor(Color.TRANSPARENT)
@@ -47,18 +48,22 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
             binding.body.isHorizontalScrollBarEnabled = false
             binding.body.setOnLongClickListener {
                 onLongClick()
+                isLongClick = true
                 true
             }
 
             binding.body.setOnTouchListener { v, event ->
                 if (event.action === MotionEvent.ACTION_MOVE) {
-                     false
+                     true
                 }
 
                 if (event.action === MotionEvent.ACTION_UP) {
-                    onClick()
+                    if (!isLongClick){
+                        onClick()
+                    }else{
+                        isLongClick = false
+                    }
                 }
-
                  false
             }
 

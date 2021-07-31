@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 
 object Constants {
+    const val APP_DATABASE_NAME = "app-database"
+
     object SharedPreferences{
         const val LAST_SYNC = "last_sync"
     }

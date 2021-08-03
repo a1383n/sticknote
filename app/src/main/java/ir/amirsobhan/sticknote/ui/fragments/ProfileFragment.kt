@@ -167,7 +167,7 @@ class ProfileFragment : Fragment() {
         } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.proEmailInput.text.toString()).matches()) {
             binding.proEmailLy.error = getString(R.string.valid_input,"email")
             return false
-        } else if (!binding.proPhoneInput.text.isNullOrBlank() && !Patterns.PHONE.matcher(binding.proPhoneInput.text.toString()).matches()) {
+        } else if (inputPhoneNumber.length > 5 && !Patterns.PHONE.matcher(inputPhoneNumber).matches()) {
             binding.proPhoneLy.error = getString(R.string.valid_input,"phone number")
             return false
         } else {
@@ -225,7 +225,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun isPhoneChangeRequest(): Boolean {
-        return inputPhoneNumber.length > 4 && inputPhoneNumber != user.phoneNumber
+        return inputPhoneNumber.length > 5 && inputPhoneNumber != user.phoneNumber
     }
 
     private fun startPhoneVerification(onSuccess : () -> Unit){

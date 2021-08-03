@@ -76,7 +76,7 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
                 )
             )
             .setPositiveButton(R.string.yes) { _, _ ->
-                selectedNote.value!!.forEach { delete(it) }
+                repository.deleteByID(selectedNoteValue.map { it.id }.toTypedArray())
                 actionMode?.finish()
             }
             .setNegativeButton(R.string.no) { _, _ -> }

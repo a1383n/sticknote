@@ -30,7 +30,7 @@ class AutoSyncWorkerTest {
     }
 
     @Test
-    fun testSleepWorker() {
+    fun testWorker() {
         val worker = TestWorkerBuilder<AutoSync>(context,executor, Data.Builder().putAll(mapOf("action" to "sync")).build())
             .build()
         val result = worker.doWork()

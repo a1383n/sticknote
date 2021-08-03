@@ -8,6 +8,7 @@ object Constants {
 
     object SharedPreferences{
         const val LAST_SYNC = "last_sync"
+        const val IS_APP_UPDATE = "is_app_update"
     }
 
     object CloudDatabase{

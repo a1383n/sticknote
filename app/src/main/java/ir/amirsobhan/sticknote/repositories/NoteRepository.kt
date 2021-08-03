@@ -47,6 +47,11 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     fun delete(note: Note){
         diskIO().submit { noteDao.delete(note) }
-        workManager.enqueue(AutoSync.Factory(AutoSync.DELETE,note.id))
+        workManager.enqueue(AutoSync.Factory(AutoSync.DELETE, arrayOf(note.id)))
+    }
+
+    fun deleteByID(array: Array<String>){
+        diskIO().submit { noteDao.deleteNotesByID(array) }
+        workManager.enqueue(AutoSync.Factory(AutoSync.DELETE,array))
     }
 }

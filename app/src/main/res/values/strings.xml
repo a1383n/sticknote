@@ -83,4 +83,10 @@ N    <string name="note_activity_untitled">Untitled</string>
         <item>Heading 5</item>
         <item>Heading 6</item>
     </string-array>
+
+    <string name="recent_changes">Recent changes</string>
+    <string-array name="recent_changes_list">
+        <item>Bugs fixed</item>
+        <item>Recent changes dialog added</item>
+    </string-array>
 </resources>

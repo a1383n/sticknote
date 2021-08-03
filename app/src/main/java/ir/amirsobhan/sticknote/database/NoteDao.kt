@@ -35,6 +35,9 @@ interface NoteDao {
     @Query("DELETE FROM Note")
     fun deleteAll()
 
+    @Query("DELETE FROM Note WHERE id IN (:id)")
+    fun deleteNotesByID(id : Array<String>)
+
     @Insert
     fun insert(note: Note)
 

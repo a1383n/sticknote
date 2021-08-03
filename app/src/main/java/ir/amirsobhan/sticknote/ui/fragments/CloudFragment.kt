@@ -53,7 +53,7 @@ import org.koin.android.ext.android.inject
                     .observe(viewLifecycleOwner, {
                     if (it.state == WorkInfo.State.SUCCEEDED){
                             binding.syncButtom.isEnabled = true
-                            binding.lastSync.text = viewModel.getLastSyncDate()
+                            binding.lastSync.text = getString(R.string.last_sync,viewModel.getLastSyncDate())
                     }
                 })
             }

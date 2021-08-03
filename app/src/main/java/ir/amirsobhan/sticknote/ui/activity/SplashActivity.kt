@@ -52,9 +52,8 @@ class SplashActivity : AppCompatActivity() {
             splashActivityBinding.appName.text = Html.fromHtml(string)
         }
 
-
         //Check for update
-        if (remoteConfig[Constants.RemoteConfig.APP_VERSION].asDouble() < BuildConfig.VERSION_NAME.toDouble()) {
+        if (remoteConfig[Constants.RemoteConfig.APP_VERSION].asLong() > BuildConfig.VERSION_CODE) {
             MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
                 .setTitle(R.string.splash_activity_update_available_title)
                 .setMessage(R.string.splash_activity_update_available_message)

@@ -9,8 +9,6 @@ import androidx.work.*
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.Constants
@@ -28,19 +26,19 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
         const val SYNC = 4
         const val TAG = "sync"
         private const val ACTION = "action"
-        private const val NOTE_ID = "id"
+        private const val NOTES = "notes"
 
-        fun Factory(action : Int,id : String = "") : OneTimeWorkRequest{
+        fun Factory(action: Int,notesId: Array<String> = arrayOf()) : OneTimeWorkRequest{
             return OneTimeWorkRequestBuilder<AutoSync>()
-                    .addTag(TAG)
+                    .addTag(action.toString())
                     .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-                    .setInputData(Data.Builder().putAll(mapOf(ACTION to action, NOTE_ID to id)).build())
+                    .setInputData(Data.Builder().putAll(mapOf(ACTION to action, NOTES to notesId)).build())
                     .build()
         }
     }
 
     //Initialization Firestore database & note repository
-    val firestore: FirebaseFirestore = Firebase.firestore
+    val firestore = Firebase.firestore
     private val repository: NoteRepository by inject(NoteRepository::class.java)
     private val sharedPreferences: SharedPreferences by inject(SharedPreferences::class.java)
     val auth = Firebase.auth
@@ -59,7 +57,7 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
             GET -> getNotesFromRemote()
             SET -> setNotesToRemote(repository.exportAll())
             SYNC -> syncNotesToRemote()
-            DELETE -> deleteNoteFromEveryWhere(inputData.getString(NOTE_ID)!!)
+            DELETE -> deleteNotes(inputData.getStringArray(NOTES)!!)
         }
 
         return Result.success()
@@ -90,7 +88,7 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
         doc.set(hashMapOf(
                 Constants.CloudDatabase.LAST_SYNC_FIELD to Timestamp(Date(time)),
                 Constants.CloudDatabase.NOTE_FIELD to list
-        ), SetOptions.merge()).addOnSuccessListener {
+        )).addOnSuccessListener {
             sharedPreferences.edit().putLong(Constants.SharedPreferences.LAST_SYNC, time).apply()
         }
     }
@@ -105,27 +103,21 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
                         }catch (e : Exception){}
                     }
 
-                    repository.insertAll(remoteList)
-
-                    Handler(Looper.getMainLooper()).postDelayed({ setNotesToRemote(repository.exportAll()) },1000)
+                    if(!remoteList.deepEquals(repository.exportAll())) {
+                        repository.insertAll(remoteList)
+                        Handler(Looper.getMainLooper()).postDelayed({ setNotesToRemote(repository.exportAll()) },500)
+                    }
                 }
     }
 
-    private fun deleteNoteFromEveryWhere(id : String) {
-        val remoteList = mutableListOf<Note>()
+    private fun deleteNotes(notesId: Array<out String>) {
+        var remoteList = mutableListOf<Note>()
 
         doc.get()
                 .addOnSuccessListener {
                     if (it.exists()) {
                         (it["notes"] as List<HashMap<String, Objects>>).forEach { remoteList.add(Note.fromHashMap(it)) }
-
-                        remoteList.forEach {
-                            if (it.id == id){
-                                remoteList.remove(it)
-                                return@forEach
-                            }
-                        }
-
+                        remoteList.removeAll { notesId.contains(it.id) }
                         setNotesToRemote(remoteList)
                     }
                 }

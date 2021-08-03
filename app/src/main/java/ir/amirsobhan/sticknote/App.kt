@@ -2,13 +2,11 @@ package ir.amirsobhan.sticknote
 
 import android.app.Application
 import android.content.Context
-import android.os.Handler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.preference.PreferenceManager
 import androidx.work.WorkManager
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Scope
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -52,7 +50,8 @@ class App : Application(), androidx.work.Configuration.Provider{
             single { WorkManager.getInstance(this@App) }
             single { GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(Constants.GOOGLE_ID_TOKEN)
-                    .requestScopes(Scope("profile"))
+                    .requestId()
+                    .requestProfile()
                     .requestEmail()
                     .build()
             }
@@ -65,21 +64,22 @@ class App : Application(), androidx.work.Configuration.Provider{
             modules(viewModelModules,appModules)
         }
 
+
+        initFirebase()
+
+    }
+
+    private fun initFirebase(){
         // Start and config firebase services
         FirebaseApp.initializeApp(this)
         val appCheck = FirebaseAppCheck.getInstance()
         appCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
         Firebase.remoteConfig.setDefaultsAsync(mapOf(
-            Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_NAME.toDouble(),
+            Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_CODE,
             Constants.RemoteConfig.FETCH_INTERVAL to if (BuildConfig.DEBUG) 0 else 3600
         ))
 
-        Handler(mainLooper).post { initFirebase() }
-
-    }
-
-    private fun initFirebase(){
         Firebase.auth.currentUser?.reload()
         Firebase.analytics
         Firebase.performance

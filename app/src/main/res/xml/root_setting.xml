@@ -36,5 +36,12 @@
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
             android:defaultValue="-1"/>
+
+        <SwitchPreference
+            android:key="@string/setting_general_encryption"
+            android:title="Encrypt Notes"
+            android:summary="Encrypted by the AES-192 algorithm"
+            android:icon="@drawable/ic_baseline_lock_24"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

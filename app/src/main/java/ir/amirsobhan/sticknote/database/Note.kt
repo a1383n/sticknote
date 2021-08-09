@@ -2,6 +2,7 @@ package ir.amirsobhan.sticknote.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
+import ir.amirsobhan.sticknote.helper.AES
 import java.util.*
 
 @Entity
@@ -9,7 +10,8 @@ data class Note(
         @PrimaryKey val id: String = generateRandomId(),
         var title: String,
         var text: String?,
-        var timestamp: Timestamp = Timestamp.now()
+        var timestamp: Timestamp = Timestamp.now(),
+        var isEncrypted : Boolean = false
 
 ){
     companion object{
@@ -24,7 +26,8 @@ data class Note(
                 hashMap["id"].toString(),
                 hashMap["title"].toString(),
                 hashMap["text"].toString(),
-                hashMap["timestamp"] as Timestamp
+                hashMap["timestamp"] as Timestamp,
+                hashMap["encrypted"] as Boolean
             )
         }
     }
@@ -68,3 +71,6 @@ fun grs(length: Int) : String{
 fun generateRandomId() : String{
     return grs(8) + "-" + grs(4) + "-" + grs(4) + "-" + grs(4)  + "-" + grs(12)
 }
+
+fun Note.encrypte() = AES.encryptNote(this)
+fun Note.decrypte() = AES.decryptNote(this)

@@ -29,6 +29,7 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     fun insertAll(noteList: List<Note>){
         diskIO().submit { noteDao.insertAll(noteList) }
+        workManager.enqueue(AutoSync.Factory(AutoSync.SET))
     }
 
     fun deleteAll(){

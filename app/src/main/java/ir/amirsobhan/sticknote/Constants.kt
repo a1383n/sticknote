@@ -2,6 +2,7 @@ package ir.amirsobhan.sticknote
 
 import android.content.Context
 import android.content.res.Configuration
+import org.koin.java.KoinJavaComponent.inject
 
 object Constants {
     const val APP_DATABASE_NAME = "app-database"
@@ -9,6 +10,7 @@ object Constants {
     object SharedPreferences{
         const val LAST_SYNC = "last_sync"
         const val IS_APP_UPDATE = "is_app_update"
+        const val ENCRYPTION_READY = "encryption_redy"
     }
 
     object CloudDatabase{
@@ -21,6 +23,13 @@ object Constants {
     object RemoteConfig{
         const val APP_VERSION = "app_version"
         const val FETCH_INTERVAL = "fetch_interval"
+    }
+
+    object Encryption{
+        private val sharedPreferences by inject(android.content.SharedPreferences::class.java)
+        const val ALGORITHM = "AES"
+        const val TRANSFORMATION = "AES/ECB/PKCS5Padding"
+        fun isReady() = sharedPreferences.getBoolean(SharedPreferences.ENCRYPTION_READY,false)
     }
 
     const val GOOGLE_ID_TOKEN = "407197468075-hvl6n5tldj9pngajraeevhkegt4ndu9q.apps.googleusercontent.com"

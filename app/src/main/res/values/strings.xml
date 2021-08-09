@@ -45,6 +45,7 @@ N    <string name="note_activity_untitled">Untitled</string>
 
     <!-- Setting preferences keys -->
     <string name="setting_general_theme">general_theme</string>
+    <string name="setting_general_encryption">general_encryption</string>
     <string name="setting_acc_info">account_info</string>
     <string name="setting_acc_edit">account_edit</string>
     <string name="setting_acc_verify">account_verify</string>
@@ -88,5 +89,9 @@ N    <string name="note_activity_untitled">Untitled</string>
     <string-array name="recent_changes_list">
         <item>Bugs fixed</item>
         <item>Recent changes dialog added</item>
+    </string-array>
+
+    <string-array name="encryption_methods">
+        <item>Google account</item>
     </string-array>
 </resources>

@@ -21,6 +21,8 @@ import ir.amirsobhan.sticknote.Constants
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.database.Note
 import ir.amirsobhan.sticknote.databinding.RowNoteBinding
+import ir.amirsobhan.sticknote.helper.DecryptionResult
+import ir.amirsobhan.sticknote.helper.EncryptionHelper
 import ir.amirsobhan.sticknote.ui.activity.NoteActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,10 +69,8 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
                  false
             }
 
-
-
             // If note body is large show part of that
-            if(note.text != null && note.text!!.length > 150){
+            if(note.text != null && note.text!!.length > 200){
                 binding.body.loadData(context.getString(R.string.note_adapter_long_body,html.substring(0,200)),"text/html", "UTF-8")
             }
 
@@ -78,6 +78,7 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
         }
 
         /**
+         * Parse to readable format
          * @param date The date you want to convert to string
          * @return The output of <code>formatDate()</code> function
          */
@@ -130,8 +131,8 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
     )
 
     override fun onBindViewHolder(holderNote: NoteViewHolder, position: Int) {
-        val note = noteList[position]
-        holderNote.bind(noteList[position],
+        val note = decryptNote(noteList[position])
+        holderNote.bind(note,
             { onClick(note, holderNote) }, { onLongClick(note, holderNote) })
 
         //Collect all views in adapter
@@ -160,6 +161,20 @@ class NoteAdapter(val context: Context?, private val selectedItems : MutableLive
          */
         holderNote.binding.root.setOnLongClickListener { onLongClick(note, holderNote) }
 
+    }
+
+    /**
+     * Try to decrypt note with Helper class
+     * @param note An encrypted note
+     */
+    fun decryptNote(note: Note): Note {
+        val pair = EncryptionHelper.tryDecrypt(note)
+
+        return when(pair.first){
+            DecryptionResult.SUCCESSES -> note
+            DecryptionResult.SECRET_NOT_FOUND -> EncryptionHelper.notReadyNote(note)
+            else -> note
+        }
     }
 
 

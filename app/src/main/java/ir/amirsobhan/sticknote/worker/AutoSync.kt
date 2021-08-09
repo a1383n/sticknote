@@ -122,8 +122,9 @@ class AutoSync(val context: Context, workerParameters: WorkerParameters) : Worke
                     }
                 }
     }
+}
 
-    private fun List<*>.deepEquals(other: List<*>): Boolean {
-        return this.size == other.size && this.mapIndexed { index, any -> any == other[index] }.all { it }
-    }
+
+fun List<*>.deepEquals(other: List<*>): Boolean {
+    return this.size == other.size && this.mapIndexed { index, any -> any == other[index] }.all { it }
 }

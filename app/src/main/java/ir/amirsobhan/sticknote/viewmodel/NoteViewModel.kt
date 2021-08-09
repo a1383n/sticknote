@@ -10,9 +10,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.adapters.NoteAdapter
 import ir.amirsobhan.sticknote.database.Note
+import ir.amirsobhan.sticknote.helper.DecryptionResult
+import ir.amirsobhan.sticknote.helper.EncryptionHelper
+import ir.amirsobhan.sticknote.helper.EncryptionResult
 import ir.amirsobhan.sticknote.repositories.NoteRepository
 
 class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
@@ -25,11 +30,21 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     private fun getAllNote(): LiveData<List<Note>> = repository.getAll()
 
     fun insert(note: Note) {
-        repository.insert(note)
+        val pair = EncryptionHelper.tryEncrypt(note)
+
+        when(pair.first){
+            EncryptionResult.SUCCESSES -> repository.insert(pair.second!!)
+            else -> Firebase.crashlytics.recordException(IllegalStateException(pair.toString()))
+        }
     }
 
     fun update(note: Note) {
-        repository.update(note)
+        val pair = EncryptionHelper.tryEncrypt(note)
+
+        when(pair.first){
+            EncryptionResult.SUCCESSES -> repository.update(pair.second!!)
+            else -> Firebase.crashlytics.recordException(IllegalStateException(pair.toString()))
+        }
     }
 
     fun delete(note: Note) {
@@ -37,7 +52,15 @@ class NoteViewModel(private val repository: NoteRepository) : ViewModel() {
     }
 
     fun getNoteByID(id: String): Note {
-        return repository.getNoteByID(id)
+        val note = repository.getNoteByID(id)
+        val pair = EncryptionHelper.tryDecrypt(note)
+
+        return when(pair.first){
+            DecryptionResult.SUCCESSES -> pair.second!!
+            DecryptionResult.SECRET_NOT_FOUND -> EncryptionHelper.notReadyNote(note)
+            DecryptionResult.BAD_INPUT -> note
+            else -> note
+        }
     }
 
     fun actionModeCallback(context: Context): ActionMode.Callback {

@@ -24,6 +24,7 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import ir.amirsobhan.sticknote.R
 import ir.amirsobhan.sticknote.databinding.FragmentLoginBinding
+import ir.amirsobhan.sticknote.helper.AES
 import org.koin.android.ext.android.inject
 
 class LoginFragment : Fragment() {
@@ -31,6 +32,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private val auth = Firebase.auth
     private lateinit var displayName : String
+    private lateinit var accountId : String
 
     val data : Intent = Intent()
 
@@ -81,6 +83,9 @@ class LoginFragment : Fragment() {
             .addOnSuccessListener {
                 Firebase.analytics.logEvent(FirebaseAnalytics.Event.LOGIN,null)
                 Firebase.analytics.setUserProperty(FirebaseAnalytics.UserProperty.SIGN_UP_METHOD,"email")
+
+                AES.buildSecret(binding.inputPassword.text.toString())
+
                 activity?.setResult(Activity.RESULT_OK,data)
                 activity?.finish()
             }
@@ -151,6 +156,7 @@ class LoginFragment : Fragment() {
             try {
                 val account = task.getResult(ApiException::class.java)!!
                 displayName = account.displayName!!
+                accountId = account.id!!
                 firebaseAuthWithGoogle(account.idToken!!)
             }catch (e : ApiException){
                 Firebase.crashlytics.recordException(e)

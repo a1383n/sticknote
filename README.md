@@ -12,7 +12,6 @@ A simple cloud-based notebook app that works with **Google Firebase**.This app w
  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
  - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
  - [Navigation Components](https://developer.android.com/guide/navigation)
- - [Gson](https://github.com/google/gson)
  - [About Page](https://github.com/medyo/android-about-page)
  - [PhoneEmoji](https://github.com/tfcporciuncula/phonemoji)
  - [Picasso](https://github.com/square/picasso)

@@ -44,10 +44,11 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
+    namespace 'ir.amirsobhan.sticknote'
+
 }
 
 dependencies {

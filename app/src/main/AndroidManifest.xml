@@ -16,7 +16,8 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.StickNote">
 
-        <activity android:name=".ui.activity.SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

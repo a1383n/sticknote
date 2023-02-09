@@ -25,7 +25,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.NoteActivity">
+        <activity 
+            android:name=".ui.activity.NoteActivity"
+            android:exported="true">
             <intent-filter
                 android:label="Create Note">
                 <action android:name="android.intent.action.SEND"/>
@@ -67,7 +69,9 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <receiver android:name=".receivers.PackageUpdateReceiver">
+        <receiver 
+            android:name=".receivers.PackageUpdateReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>

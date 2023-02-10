@@ -5,10 +5,15 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [master]
+    branches:
+      - 'master'
+      - '*.x'
+    paths-ignore:
+      - '.github/**'
   pull_request:
-    branches: [master]
-
+    paths-ignore:
+        - '.github/**'
+        
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -37,7 +37,7 @@ jobs:
       - name: Download Android SDK
         uses: wei/wget@v1
         with:
-          args: -q https://dl.google.com/android/repository/commandlinetools-linux-${{ env.ANDROID_SDK_ROOT }}_latest.zip
+          args: -q https://dl.google.com/android/repository/commandlinetools-linux-${{ env.ANDROID_SDK_VERSION }}_latest.zip
 
       - name: Setup Android SDK
         run: mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest && \

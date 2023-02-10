@@ -34,9 +34,13 @@ jobs:
 #      - name: Install tools
 #        run: sudo apt-get update -q && sudo apt-get install unzip wget -y -q
 
+      - name: Download Android SDK
+        uses: wei/wget@v1
+        with:
+          args: wget -q https://dl.google.com/android/repository/commandlinetools-linux-$ANDROID_SDK_VERSION_latest.zip
+
       - name: Setup Android SDK
         run: mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest && \
-            /bin/wget -q https://dl.google.com/android/repository/commandlinetools-linux-$ANDROID_SDK_VERSION_latest.zip && \
             unzip *tools*linux*.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools/ && \
             mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest && \
             rm *tools*linux*.zip && \

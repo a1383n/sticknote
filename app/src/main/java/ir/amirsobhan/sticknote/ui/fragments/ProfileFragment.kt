@@ -231,8 +231,8 @@ class ProfileFragment : Fragment() {
     private fun startPhoneVerification(onSuccess : () -> Unit){
         val phoneVerificationFragment = PhoneVerificationFragment(inputPhoneNumber)
         phoneVerificationFragment.show(parentFragmentManager,"phone_verification")
-        phoneVerificationFragment.verificationStatus.observe(viewLifecycleOwner,{
-            when (it){
+        phoneVerificationFragment.verificationStatus.observe(viewLifecycleOwner) {
+            when (it) {
                 PhoneVerificationFragment.PhoneVerificationStatus.COMPLETED -> onSuccess().also { phoneVerificationFragment.dismiss() }
                 PhoneVerificationFragment.PhoneVerificationStatus.ERROR -> {
                     binding.proPhoneLy.error = phoneVerificationFragment.verificationError
@@ -240,15 +240,16 @@ class ProfileFragment : Fragment() {
                     loading(false)
                 }
                 PhoneVerificationFragment.PhoneVerificationStatus.CANCELED -> loading(false)
+                else -> {}
             }
-        })
+        }
     }
 
     private fun startEmailVerification(onSuccess: () -> Unit){
         val emailVerificationFragment = EmailChangeFragment(binding.proEmailInput.text.toString())
         emailVerificationFragment.show(parentFragmentManager,"email_verification")
-        emailVerificationFragment.verificationStatus.observe(viewLifecycleOwner,{
-            when (it){
+        emailVerificationFragment.verificationStatus.observe(viewLifecycleOwner) {
+            when (it) {
                 EmailChangeFragment.EmailVerificationStatus.COMPLETED -> onSuccess().also { emailVerificationFragment.dismiss() }
                 EmailChangeFragment.EmailVerificationStatus.ERROR -> {
                     binding.proPhoneLy.error = emailVerificationFragment.verificationError
@@ -256,8 +257,9 @@ class ProfileFragment : Fragment() {
                     loading(false)
                 }
                 EmailChangeFragment.EmailVerificationStatus.CANCELED -> loading(false)
+                else -> {}
             }
-        })
+        }
     }
 
     private fun isEmailChangeRequest() : Boolean{

@@ -10,13 +10,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ir.amirsobhan.sticknote"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 3
         versionName "1.0.3"
 
@@ -44,10 +44,11 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    lintOptions {
+    lint {
         abortOnError false
     }
+    namespace 'ir.amirsobhan.sticknote'
+
 }
 
 dependencies {
@@ -97,7 +98,7 @@ dependencies {
 
 
     //Navigation Components
-    def nav_version = "2.3.3"
+    def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 

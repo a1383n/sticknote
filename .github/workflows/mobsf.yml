@@ -8,15 +8,17 @@ name: MobSF
 on:
   push:
     branches:
-      - 'master'
-      - '*.x'
+      - "master"
+      - "*.x"
     paths-ignore:
-      - '.github/**'
+      - ".github/**"
+      - "!.github/workflows/mobsf.yml"
   pull_request:
     paths-ignore:
-      - '.github/**'
+      - ".github/**"
+      - "!.github/workflows/mobsf.yml"
   schedule:
-    - cron: '24 9 * * 5'
+    - cron: "24 9 * * 5"
 
 permissions:
   contents: read

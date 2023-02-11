@@ -39,15 +39,18 @@ jobs:
         with:
           args: -q https://dl.google.com/android/repository/commandlinetools-linux-${{ env.ANDROID_SDK_VERSION }}_latest.zip
 
+      - name: Unzip Android SDK
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip *tools*linux*.zip -d ${{ env.ANDROID_SDK_ROOT }}/cmdline-tools/
+
       - name: Setup Android SDK
         run: mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest && \
-            unzip *tools*linux*.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools/ && \
             mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest && \
             rm *tools*linux*.zip && \
-            export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
 
       - name: Install SDK tools
-        run: (while sleep 3; do echo "y"; done) | sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;33.0.2" --channel=0
+        run: (while sleep 3; do echo "y"; done) | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-33" "build-tools;33.0.2" --channel=0
 
       - name: Prepare the source for build
         run: chmod +x gradlew

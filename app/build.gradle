@@ -136,7 +136,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-appcheck-safetynet:16.1.1'
 
     //Google Sign In
-    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'

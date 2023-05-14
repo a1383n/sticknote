@@ -17,7 +17,6 @@ class InfoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val root : View =
             AboutPage(context)
-                .enableDarkMode(Constants.isDarkMode(requireContext()))
                 .setImage(R.drawable.logo)
                 .setDescription(getString(R.string.app_description,getString(R.string.app_name)))
                 .addGitHub("a1383n")
@@ -29,7 +28,7 @@ class InfoFragment : Fragment() {
 
 
         if (Constants.isDarkMode(requireContext())) {
-            val linearLayout: LinearLayout = root.findViewById(R.id.sub_wrapper)
+            val linearLayout: LinearLayout = root.findViewById(mehdi.sakout.aboutpage.R.id.sub_wrapper)
             linearLayout.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.window_bg))
         }
 

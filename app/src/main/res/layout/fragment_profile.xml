@@ -111,7 +111,7 @@
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.tfcporciuncula.phonemoji.PhonemojiTextInputLayout
+        <com.fredporciuncula.phonemoji.PhonemojiTextInputLayout
             android:id="@+id/pro_phone_ly"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
@@ -123,13 +123,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pro_email_ly">
 
-            <com.tfcporciuncula.phonemoji.PhonemojiTextInputEditText
+            <com.fredporciuncula.phonemoji.PhonemojiTextInputEditText
                 android:id="@+id/pro_phone_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="phone" />
 
-        </com.tfcporciuncula.phonemoji.PhonemojiTextInputLayout>
+        </com.fredporciuncula.phonemoji.PhonemojiTextInputLayout>
 
         <View
             android:id="@+id/pro_hr"

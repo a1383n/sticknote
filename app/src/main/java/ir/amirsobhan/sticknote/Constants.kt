@@ -26,7 +26,7 @@ object Constants {
     }
 
     object Encryption{
-        private val sharedPreferences by inject(android.content.SharedPreferences::class.java)
+        private val sharedPreferences by inject<android.content.SharedPreferences>(android.content.SharedPreferences::class.java)
         const val ALGORITHM = "AES"
         const val TRANSFORMATION = "AES/ECB/PKCS5Padding"
         fun isReady() = sharedPreferences.getBoolean(SharedPreferences.ENCRYPTION_READY,false)

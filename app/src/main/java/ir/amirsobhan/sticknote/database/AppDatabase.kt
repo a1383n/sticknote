@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import ir.amirsobhan.sticknote.Constants
 import ir.amirsobhan.sticknote.helper.Converters
 
-@Database(entities = [Note::class], version = 2)
+@Database(entities = [Note::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao

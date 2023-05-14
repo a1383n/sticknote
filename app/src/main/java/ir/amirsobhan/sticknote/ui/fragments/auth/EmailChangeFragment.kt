@@ -165,7 +165,7 @@ class EmailChangeFragment(private val newEmail: String) : BottomSheetDialogFragm
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         dialog.setOnShowListener {
             mainThread(requireContext()).execute {
-                val bottomSheet = (dialog as? BottomSheetDialog)?.findViewById<View>(R.id.design_bottom_sheet) as? FrameLayout
+                val bottomSheet = (dialog as? BottomSheetDialog)?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as? FrameLayout
                 bottomSheet?.let {
                     BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
                 }

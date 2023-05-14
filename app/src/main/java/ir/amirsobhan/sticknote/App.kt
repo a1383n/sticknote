@@ -10,15 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.appcheck.FirebaseAppCheck
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
-import com.google.firebase.perf.ktx.performance
 import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -28,8 +25,8 @@ import ir.amirsobhan.sticknote.viewmodel.CloudViewModel
 import ir.amirsobhan.sticknote.viewmodel.NoteViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.context.startKoin
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.module
 
 class App : Application(), androidx.work.Configuration.Provider{
@@ -72,8 +69,6 @@ class App : Application(), androidx.work.Configuration.Provider{
     private fun initFirebase(){
         // Start and config firebase services
         FirebaseApp.initializeApp(this)
-        val appCheck = FirebaseAppCheck.getInstance()
-        appCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
         Firebase.remoteConfig.setDefaultsAsync(mapOf(
             Constants.RemoteConfig.APP_VERSION to BuildConfig.VERSION_CODE,
@@ -82,7 +77,6 @@ class App : Application(), androidx.work.Configuration.Provider{
 
         Firebase.auth.currentUser?.reload()
         Firebase.analytics
-        Firebase.performance
         Firebase.messaging
 
         Firebase.auth.currentUser?.uid?.let {

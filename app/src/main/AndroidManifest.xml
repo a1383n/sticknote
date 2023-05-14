@@ -55,11 +55,6 @@
             android:resource="@color/accent"/>
 
         <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove" />
-
-        <provider
             android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
